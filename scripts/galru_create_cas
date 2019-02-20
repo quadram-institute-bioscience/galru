@@ -15,11 +15,11 @@ except pkg_resources.DistributionNotFound:
 
 parser = argparse.ArgumentParser(
 	description = 'Create Cas gene file',
-	usage = 'galru_create [options] output_filename.fa assembly1.fa assembly2.fa'
+	usage = 'galru_create_cas [options] output_filename.fa cds_fasta_1.fa cds_fasta_1.fa'
     , formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument('output_filename', help='Output filename for the Cas FASTA file', type=str)
-parser.add_argument('input_files', help='Input FASTA files (optionally gzipped)', nargs='+', type=str)
+parser.add_argument('input_files', help='Input FASTA files containing nucleotides of CDS (optionally gzipped)', nargs='+', type=str)
 
 parser.add_argument('--verbose', '-v', action='store_true', help='Turn on debugging [%(default)s]', default = False)
 parser.add_argument('--version', action='version', version=str(version))
