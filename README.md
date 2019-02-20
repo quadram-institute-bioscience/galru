@@ -81,6 +81,8 @@ gunzip
 cd-hit-est (from cd-hit)
 minced
 bedtools
+samtools (1.3 or above)
+minimap2
 
 # pypi
 fastaq (from pyfastaq)

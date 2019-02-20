@@ -6,6 +6,9 @@ import sys
 from tempfile import mkstemp
 from Bio import SeqIO
 
+
+# Todo: merge crispr regions which are very close together and are probably the same feature.
+
 class GalruCreateDatabase:
     def __init__(self,options):
         self.input_files = options.input_files
