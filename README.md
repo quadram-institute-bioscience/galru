@@ -75,9 +75,12 @@ Coming soon
 grep
 xargs
 find 
+gunzip
 
 # conda
 cd-hit-est (from cd-hit)
+minced
+bedtools
 
 # pypi
 fastaq (from pyfastaq)
