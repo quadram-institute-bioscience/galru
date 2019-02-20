@@ -30,7 +30,7 @@ class GalruCreateDatabase:
         m = re.search(".gz$",input_fasta)
         if m:
             fd, input_fasta_uncompressed = mkstemp()
-            cmd = " ".join(["gunzip", '-c'] + input_fasta + [ '>' + input_fasta_uncompressed])
+            cmd = " ".join(["gunzip", '-c', input_fasta, '>' + input_fasta_uncompressed])
             if self.verbose:
                 print(cmd)
             subprocess.check_output( cmd, shell=True)

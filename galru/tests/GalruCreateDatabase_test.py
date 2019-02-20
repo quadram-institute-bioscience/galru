@@ -29,3 +29,4 @@ class TestGalruCreateDatabase(unittest.TestCase):
             shutil.rmtree('output_db')
         
         os.remove(os.path.join(data_dir,'sample1.fa') + '.fai')
+        
