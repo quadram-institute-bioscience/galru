@@ -68,3 +68,17 @@ Coming soon
 
 # Etymology
 [galrú](https://www.teanglann.ie/en/fgb/galr%C3%BA) (Gal-roo) is the word for infection in Irish (Gaeilge). 
+
+
+# External Dependancies
+## system
+grep
+xargs
+find 
+
+# conda
+cd-hit-est (from cd-hit)
+
+# pypi
+fastaq (from pyfastaq)
+
