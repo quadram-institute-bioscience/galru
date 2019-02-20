@@ -2,6 +2,7 @@ import os
 import subprocess
 import shutil
 import re
+import sys
 from tempfile import mkstemp
 from Bio import SeqIO
 
@@ -50,6 +51,16 @@ class GalruCreateDatabase:
         return crispr_gff_outputfile
         
     def extract_nucleotides_from_gff(self, input_fasta, gff_file):
+        m = re.search(".gz$",input_fasta)
+        if m:
+            fd, input_fasta_uncompressed = mkstemp()
+            cmd = " ".join(["gunzip", '-c', input_fasta, '>' + input_fasta_uncompressed])
+            if self.verbose:
+                print(cmd)
+            subprocess.check_output( cmd, shell=True)
+            self.files_to_cleanup.append(input_fasta_uncompressed)
+            input_fasta = input_fasta_uncompressed
+
         fd, outputfile = mkstemp()
         self.files_to_cleanup.append(outputfile)
         
