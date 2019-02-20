@@ -15,9 +15,7 @@ class GalruCreateCas:
         fd, single_filtered_outputfile = mkstemp()
         self.files_to_cleanup.append(single_filtered_outputfile)
 
-        cmd = ' '.join(['fastaq','get_ids', filename, '-', '|', 'grep', 'Cas', '|',
-                        'awk', "'{print $1}", '|', 'fastaq', 'filter', '--ids_file', '-',
-                        filename, single_filtered_outputfile'])        
+        cmd = ' '.join(['fastaq','get_ids', filename, '-', '|', 'grep', 'Cas', '|',  'awk', "'{print $1}'", '|', 'fastaq', 'filter', '--ids_file', '-', filename, single_filtered_outputfile])        
         if self.verbose:
             print(cmd)
 
@@ -49,7 +47,6 @@ class GalruCreateCas:
         return compress_outputfile
         
     def run(self):
-        
         # filter out just the 'Cas' gene sequences
         # This step could be run in parallel
         cas_fastas  = []
