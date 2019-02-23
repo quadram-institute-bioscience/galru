@@ -83,6 +83,7 @@ minced
 bedtools
 samtools (1.3 or above)
 minimap2
+mlst (torstens)
 
 # pypi
 fastaq (from pyfastaq)

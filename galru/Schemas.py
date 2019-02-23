@@ -23,6 +23,6 @@ class Schemas:
         if isdir(proposed_db_dir):
             return proposed_db_dir
         else:
-            print("Cannot access the database directory for the given genus: "+ proposed_db_dir)
+            print("Cannot access the database directory for the given species: "+ proposed_db_dir)
             return None
 

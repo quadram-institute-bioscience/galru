@@ -20,7 +20,7 @@ parser = argparse.ArgumentParser(
 	usage = 'galru [options] database uncorrected_long_reads.fastq',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
-parser.add_argument('genus',  help='Genus name, use galru_genera to see all available', type=str)
+parser.add_argument('species',  help='Species name, use galru_species to see all available', type=str)
 parser.add_argument('input_file', help='Input FASTQ file of uncorrected long reads (optionally gzipped)', nargs='+', type=str)
 
 # Input

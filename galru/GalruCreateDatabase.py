@@ -5,6 +5,9 @@ import re
 import sys
 from tempfile import mkstemp
 from Bio import SeqIO
+import hashlib
+
+from galru.Mlst import Mlst
 
 
 # Todo: merge crispr regions which are very close together and are probably the same feature.
@@ -14,6 +17,7 @@ class GalruCreateDatabase:
         self.input_files = options.input_files
         self.output_directory = options.output_directory
         self.verbose = options.verbose
+        self.threads = options.threads
         self.files_to_cleanup = []
         
         self.combined_nucleotides = os.path.join(self.output_directory, 'crispr_regions.fasta')
@@ -28,6 +32,12 @@ class GalruCreateDatabase:
          
         else:
             os.makedirs(self.output_directory)
+            
+        self.redirect_output = ''
+        if self.verbose:
+            self.redirect_output = ''
+        else:
+            self.redirect_output = ' 2>&1'
         
     def find_crisprs_from_file(self, input_fasta):    
         # uncompress file before passing to minced
@@ -46,7 +56,7 @@ class GalruCreateDatabase:
         self.files_to_cleanup.append(crispr_outputfile)
         self.files_to_cleanup.append(crispr_gff_outputfile)
         
-        cmd = ' '.join(['minced', '-gff', input_fasta, crispr_gff_outputfile])
+        cmd = ' '.join(['minced', '-gff', input_fasta, crispr_gff_outputfile, self.redirect_output])
         if self.verbose:
             print(cmd)
         
@@ -67,7 +77,7 @@ class GalruCreateDatabase:
         fd, outputfile = mkstemp()
         self.files_to_cleanup.append(outputfile)
         
-        cmd = ' '.join(['bedtools', 'getfasta', '-fo', outputfile, '-fi', input_fasta, '-bed', gff_file])
+        cmd = ' '.join(['bedtools', 'getfasta', '-fo', outputfile, '-fi', input_fasta, '-bed', gff_file, self.redirect_output])
         if self.verbose:
             print(cmd)
         
@@ -80,25 +90,40 @@ class GalruCreateDatabase:
             return max(all_ids) + 1
         else:
             return 1
-        
-    def append_crispr_file(self, crispr_nucleotides_file, input_fasta_file, combined_nucleotides, metadata_file):
+            
+    def seq_to_names(self, combined_nucleotides):
+        if os.path.exists(combined_nucleotides):
+            all_seq = {str(record.seq): int(record.id) for record in SeqIO.parse(combined_nucleotides, "fasta")}
+            return all_seq
+        else:
+            return {}
+            
+    def append_crispr_file(self, crispr_nucleotides_file, input_fasta_file, combined_nucleotides, metadata_file, database, st):
+        sequences_to_names = self.seq_to_names(combined_nucleotides)
         current_id = self.next_sample_id(combined_nucleotides)
             
         with open(combined_nucleotides, "a+") as combined_fh, open(metadata_file, "a+") as metadata_fh:
             for record in SeqIO.parse(crispr_nucleotides_file, "fasta"):
-                record.id = str(current_id)
-                metadata_fh.write("\t".join([str(current_id), os.path.basename(input_fasta_file), record.description]) + "\n")
-                record.description = ''
-                SeqIO.write(record, combined_fh, "fasta")
-                current_id += 1
+                if str(record.seq) in sequences_to_names:
+                    record.id = str(sequences_to_names[record.seq])
+                    metadata_fh.write("\t".join([str(current_id), os.path.basename(input_fasta_file), record.description, database, st]) + "\n")
+                else:
+                    record.id = str(current_id)
+                    metadata_fh.write("\t".join([str(current_id), os.path.basename(input_fasta_file), record.description, database, st]) + "\n")
+                    record.description = ''
+                    SeqIO.write(record, combined_fh, "fasta")
+                    sequences_to_names[str(record.seq)] = int(current_id)
+                    current_id += 1
                 
         return self              
         
     def run(self):
         for f in self.input_files:
+            mlst = Mlst(f, self.verbose, self.threads)
+            
             crispr_gff = self.find_crisprs_from_file(f)
             crispr_nucleotides_file = self.extract_nucleotides_from_gff(f, crispr_gff)
-            self.append_crispr_file( crispr_nucleotides_file, f, self.combined_nucleotides, self.metadata_file)
+            self.append_crispr_file( crispr_nucleotides_file, f, self.combined_nucleotides, self.metadata_file,  mlst.database, mlst.st)
         
         return self
 

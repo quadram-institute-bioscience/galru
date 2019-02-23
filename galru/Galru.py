@@ -28,13 +28,18 @@ class Galru:
         self.crisprs_file = os.path.join(self.database_directory, 'crispr_regions.fasta')
         self.metadata_file = os.path.join(self.database_directory, 'metadata.tsv')
         
+        self.redirect_output = ''
+        if self.verbose:
+            self.redirect_output = ''
+        else:
+            self.redirect_output = ' 2>&1'
         
     # map the raw reads to the clustered cas genes = gives reads containing cas genes
     def reads_with_cas_genes(self):
         fd, reads_outputfile = mkstemp()
         self.files_to_cleanup.append(reads_outputfile)
         
-        cmd = ' '.join(['minimap2', '-x', self.technology, '-a',  self.cas_fasta, self.input_file, '|', 'samtools', 'fasta', '-F', '4', '-', '>', reads_outputfile])
+        cmd = ' '.join(['minimap2', '-x', self.technology, '-a',  self.cas_fasta, self.input_file, '|', 'samtools', 'fasta', '-F', '4', '-', '>', reads_outputfile, self.redirect_output])
         if self.verbose:
             print(cmd)
         
@@ -46,7 +51,7 @@ class Galru:
         fd, reads_outputfile = mkstemp()
         self.files_to_cleanup.append(reads_outputfile)
 
-        cmd = ' '.join(['minimap2', '-x', self.technology, '-a',  self.crisprs_file, cas_reads, '|', 'samtools', 'view', '-F', '4', '-', '>', reads_outputfile])
+        cmd = ' '.join(['minimap2', '-x', self.technology, '-a',  self.crisprs_file, cas_reads, '|', 'samtools', 'view', '-F', '4', '-', '>', reads_outputfile, self.redirect_output])
         if self.verbose:
             print(cmd)
         
@@ -76,9 +81,9 @@ class Galru:
         
         return self
 
-    #def __del__(self):
-    #    for f in self.files_to_cleanup:
-    #        if os.path.exists(f):
-    #            os.remove(f)
+    def __del__(self):
+        for f in self.files_to_cleanup:
+            if os.path.exists(f):
+                os.remove(f)
             
         

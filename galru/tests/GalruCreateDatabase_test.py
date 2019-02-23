@@ -12,6 +12,7 @@ class TestOptions:
         self.input_files = input_files
         self.output_directory = output_directory
         self.verbose = verbose
+        self.threads = 1
  
 class TestGalruCreateDatabase(unittest.TestCase):
     def test_create_basic_database(self):
