@@ -1,0 +1,4 @@
+biopython==1.73
+nose==1.3.7
+numpy==1.16.1
+pyfastaq==3.17.0
