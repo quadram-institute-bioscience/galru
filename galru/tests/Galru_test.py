@@ -26,3 +26,5 @@ class TestGalru(unittest.TestCase):
         g.run()
         
         self.assertTrue(os.path.exists('output_file'))
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir,'expected_output_file'), 'output_file'))
+        os.remove('output_file')

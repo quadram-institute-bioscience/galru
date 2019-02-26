@@ -2,11 +2,10 @@ import os
 import subprocess
 import shutil
 import sys
-import csv
 import pkg_resources
 from tempfile import mkstemp
 from Bio import SeqIO
-
+from galru.Results import Results
 from galru.Schemas import Schemas
 
 # map all the reads to the Cas genes. Any reads that map are them mapped against the CRISPRs
@@ -59,26 +58,15 @@ class Galru:
         subprocess.check_output( cmd, shell=True)
         return reads_outputfile
         
-    def print_results(self, mapping_output_file):
-        results = []
-        crispr_metadata = {}
-        with open(self.metadata_file, newline='') as csvfile:
-            metadata_reader = csv.reader(csvfile, delimiter='\t')
-            for row in metadata_reader:
-                crispr_metadata[int(row[0])] = [row[1], row[2], row[3], row[4]]
-                
-        with open(mapping_output_file, newline='') as csvfile:
-            mapping_reader = csv.reader(csvfile, delimiter='\t')
-            for row in mapping_reader:
-                result = "\t".join([row[2],row[4],crispr_metadata[int(row[2])][0], crispr_metadata[int(row[2])][2],crispr_metadata[int(row[2])][3]  ])
-                results.append(result)
-        print("\n".join(results))
-        
 
     def run(self):
         cas_reads = self.reads_with_cas_genes()
         crispr_mapping = self.map_reads_to_crisprs(cas_reads)
-        self.print_results(crispr_mapping)
+        r = Results(crispr_mapping, self.metadata_file, True).summerised_results()
+        print(r)
+        
+        with open(self.output_file, "w") as out_fh:
+            out_fh.write(r)
         
         return self
 
