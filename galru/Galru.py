@@ -65,8 +65,9 @@ class Galru:
         r = Results(crispr_mapping, self.metadata_file, True).summerised_results()
         print(r)
         
-        with open(self.output_file, "w") as out_fh:
-            out_fh.write(r)
+        if self.output_file is not None:
+            with open(self.output_file, "w") as out_fh:
+                out_fh.write(r)
         
         return self
 
