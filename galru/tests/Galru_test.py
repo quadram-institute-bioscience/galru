@@ -8,8 +8,8 @@ test_modules_dir = os.path.dirname(os.path.realpath(__file__))
 data_dir = os.path.join(test_modules_dir, 'data','galru')
 
 class TestOptions:
-    def __init__(self, genus, input_file, db_dir, cas_fasta, threads, technology, output_file, verbose):
-        self.genus      = genus
+    def __init__(self, species, input_file, db_dir, cas_fasta, threads, technology, output_file, verbose):
+        self.species      = species
         self.input_file = input_file
         self.db_dir     = db_dir
         self.cas_fasta  = cas_fasta

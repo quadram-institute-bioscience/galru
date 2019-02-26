@@ -18,7 +18,7 @@ class Galru:
         self.output_file = options.output_file
         self.technology = options.technology
         
-        self.database_directory =  Schemas().database_directory(options.db_dir, options.genus)
+        self.database_directory =  Schemas().database_directory(options.db_dir, options.species)
         
         if self.cas_fasta is None:
             self.cas_fasta = str(pkg_resources.resource_filename( __name__, 'data/cas.fa.gz'))
