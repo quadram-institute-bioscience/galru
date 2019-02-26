@@ -15,10 +15,11 @@ class Mlst:
         if self.verbose:
             print(cmd)
         output = subprocess.check_output( cmd, shell=True)
+        return output
         
     def parse_output(self, mlst_text):
         if mlst_text is not '' and mlst_text is not None:
-            for row in csv.reader([mlst_text]):
+            for row in csv.reader([mlst_text], delimiter='\t'):
                 return row[1], row[2]
         return '-','-'
         
