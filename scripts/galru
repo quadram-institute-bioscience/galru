@@ -21,7 +21,7 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
 parser.add_argument('species',  help='Species name, use galru_species to see all available', type=str)
-parser.add_argument('input_file', help='Input FASTQ file of uncorrected long reads (optionally gzipped)', nargs='+', type=str)
+parser.add_argument('input_file', help='Input FASTQ file of uncorrected long reads (optionally gzipped)', type=str)
 
 # Input
 parser.add_argument('--db_dir', '-d',  help='Base directory for species databases, defaults to bundled', type=str )
