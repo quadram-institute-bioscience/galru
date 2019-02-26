@@ -3,6 +3,7 @@ import subprocess
 import shutil
 import sys
 import csv
+import pkg_resources
 from tempfile import mkstemp
 from Bio import SeqIO
 
