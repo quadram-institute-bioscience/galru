@@ -18,6 +18,7 @@ class GalruCreateDatabase:
         self.output_directory = options.output_directory
         self.verbose = options.verbose
         self.threads = options.threads
+        self.allow_missing_st = options.allow_missing_st
         self.files_to_cleanup = []
         
         self.combined_nucleotides = os.path.join(self.output_directory, 'crispr_regions.fasta')
@@ -33,6 +34,7 @@ class GalruCreateDatabase:
         else:
             os.makedirs(self.output_directory)
             
+        self.minced_word_length = 9
         self.redirect_output = ''
         if self.verbose:
             self.redirect_output = ''
@@ -56,7 +58,7 @@ class GalruCreateDatabase:
         self.files_to_cleanup.append(crispr_outputfile)
         self.files_to_cleanup.append(crispr_gff_outputfile)
         
-        cmd = ' '.join(['minced', '-searchWL', str(9), '-gff', input_fasta, crispr_gff_outputfile, self.redirect_output])
+        cmd = ' '.join(['minced', '-searchWL', str(self.minced_word_length), '-gff', input_fasta, crispr_gff_outputfile, self.redirect_output])
         if self.verbose:
             print(cmd)
         
@@ -115,13 +117,28 @@ class GalruCreateDatabase:
                     sequences_to_names[str(record.seq)] = int(current_id)
                     current_id += 1
                 
-        return self              
+        return self    
+        
+    def num_lines_in_file(self,filename):
+        lines = 0
+        with open(filename) as f:
+            for l in f:
+                lines += 1
+        return lines
         
     def run(self):
         for f in self.input_files:
             mlst = Mlst(f, self.verbose, self.threads)
+            if mlst.st == '-' and not self.allow_missing_st:
+                print(str(f)+"\t" + "ST could not be determined, skipping")
+                continue
             
             crispr_gff = self.find_crisprs_from_file(f)
+            # GFF has a header
+            if self.num_lines_in_file(crispr_gff) <=1:
+                print(str(f)+"\t" + "No CRISPRs found, skipping")
+                continue
+                
             crispr_nucleotides_file = self.extract_nucleotides_from_gff(f, crispr_gff)
             self.append_crispr_file( crispr_nucleotides_file, f, self.combined_nucleotides, self.metadata_file,  mlst.database, mlst.st)
         

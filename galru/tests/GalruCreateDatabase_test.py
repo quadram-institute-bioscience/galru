@@ -8,18 +8,19 @@ test_modules_dir = os.path.dirname(os.path.realpath(__file__))
 data_dir = os.path.join(test_modules_dir, 'data','galru_create_database')
 
 class TestOptions:
-    def __init__(self,input_files, output_directory, verbose):
+    def __init__(self,input_files, output_directory, verbose, allow_missing_st):
         self.input_files = input_files
         self.output_directory = output_directory
         self.verbose = verbose
         self.threads = 1
+        self.allow_missing_st = allow_missing_st
  
 class TestGalruCreateDatabase(unittest.TestCase):
     def test_create_basic_database(self):
         
         if os.path.exists('output_db'):
             shutil.rmtree('output_db')
-        g = GalruCreateDatabase(TestOptions([os.path.join(data_dir,'sample1.fa')], 'output_db', False))
+        g = GalruCreateDatabase(TestOptions([os.path.join(data_dir,'sample1.fa')], 'output_db', False, True))
         g.run()
         
         self.assertTrue(os.path.exists('output_db'))
@@ -36,7 +37,7 @@ class TestGalruCreateDatabase(unittest.TestCase):
         
         if os.path.exists('output_db'):
             shutil.rmtree('output_db')
-        g = GalruCreateDatabase(TestOptions([os.path.join(data_dir,'sample1.fa.gz')], 'output_db', False))
+        g = GalruCreateDatabase(TestOptions([os.path.join(data_dir,'sample1.fa.gz')], 'output_db', False, True))
         g.run()
         
         self.assertTrue(os.path.exists('output_db'))
