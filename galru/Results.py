@@ -13,7 +13,7 @@ class Results:
         else:
             return self.extended_results() 
             
-    def summerised_results(self):
+    def summerised_results(self, num_input_reads):
         results = {}
         crispr_metadata = {}
         with open(self.metadata_file, newline='') as csvfile:
@@ -30,10 +30,10 @@ class Results:
                 else:
                     results[st] = 1        
         
-        sorted_results = ["ST\tNo. Reads"]
+        sorted_results = ["ST\tNo. Reads\tInput Reads"]
         sorted_sts = sorted(results.items() , reverse=True, key=lambda x: x[1])
         for (st, st_freq) in sorted_sts :
-            sorted_results.append(str(st)+ "\t"+str(st_freq) )
+            sorted_results.append(str(st)+ "\t"+str(st_freq) + "\t" + str(num_input_reads) )
             
         return "\n".join(sorted_results)
         

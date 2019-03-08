@@ -56,7 +56,7 @@ class GalruCreateDatabase:
         self.files_to_cleanup.append(crispr_outputfile)
         self.files_to_cleanup.append(crispr_gff_outputfile)
         
-        cmd = ' '.join(['minced', '-gff', input_fasta, crispr_gff_outputfile, self.redirect_output])
+        cmd = ' '.join(['minced', '-searchWL', str(9), '-gff', input_fasta, crispr_gff_outputfile, self.redirect_output])
         if self.verbose:
             print(cmd)
         
