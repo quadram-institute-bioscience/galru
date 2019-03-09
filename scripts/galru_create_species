@@ -18,6 +18,8 @@ parser = argparse.ArgumentParser(
 	usage = 'galru_create_database [options] "species"'
     , formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
+parser.add_argument('species', help='Species in quotes',  type=str)
+
 parser.add_argument('--output_directory', '-o', help='Output directory, defaults to species name in current directory', type=str)
 parser.add_argument('--threads', '-t',  help='No. of threads to use', type=int, default=1)
 

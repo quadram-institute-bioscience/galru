@@ -127,14 +127,16 @@ class DatabaseBuilder:
             mlst = Mlst(f, self.verbose, self.threads)
             if mlst.st == '-' and not self.allow_missing_st:
                 self.skipped_st += 1 
-                print(str(f)+"\t" + "ST could not be determined, skipping")
+                if self.verbose:
+                    print(str(f)+"\t" + "ST could not be determined, skipping")
                 continue
             
             crispr_gff = self.find_crisprs_from_file(f)
             # GFF has a header
             if self.num_lines_in_file(crispr_gff) <=1:
                 self.skipped_no_crispr += 1 
-                print(str(f)+"\t" + "No CRISPRs found, skipping")
+                if self.verbose:
+                    print(str(f)+"\t" + "No CRISPRs found, skipping")
                 continue
                 
             crispr_nucleotides_file = self.extract_nucleotides_from_gff(f, crispr_gff)
@@ -142,11 +144,11 @@ class DatabaseBuilder:
         
         return self
         
-    def print_stats(self):
-        print("STs skipped:\t" + str(self.skipped_st)
-        print("No CRISPRS:\t" + str(self.skipped_no_crispr))
-        print("Total files in:\t" + str(len(self.input_files)))
-        print("Total files used:\t" + str(len(self.input_files) - self.skipped_st - self.skipped_no_crispr))
+    def generate_stats(self):
+        files_used = len(self.input_files) - self.skipped_st - self.skipped_no_crispr
+        
+        stats = [str(self.skipped_st), str(self.skipped_no_crispr), str(len(self.input_files)), str(files_used)]
+        return stats
         
 
     def __del__(self):

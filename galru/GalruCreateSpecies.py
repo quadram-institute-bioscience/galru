@@ -16,12 +16,15 @@ class GalruCreateSpecies:
         if self.output_directory is None:
             self.output_directory = re.sub("[^a-zA-Z0-9]+", "_", self.species)
             
+        if not os.path.exists(self.output_directory):
+            os.makedirs(self.output_directory)
+            
         self.directories_to_cleanup = []
         
     def download_species(self):
-        download_directory = mkdtemp(dir=self.output_directory)
+        download_directory = str(mkdtemp(dir=self.output_directory))
         
-        cmd = " ".join(['ncbi-genome-download', '-o', download_directory, '--genus', '"'+ self.species +'"', '--parallel', self.threads, '-F', 'fasta', 'bacteria'])
+        cmd = " ".join(['ncbi-genome-download', '-o', download_directory, '--genus', '"'+ self.species +'"', '--parallel', str(self.threads), '-F', 'fasta', 'bacteria'])
         if self.verbose:
             print(cmd)
         subprocess.check_output( cmd, shell=True)
@@ -41,7 +44,7 @@ class GalruCreateSpecies:
         
         database_builder = DatabaseBuilder(input_files,  self.output_directory,  self.verbose,  self.threads,  self.allow_missing_st)
         database_builder.run()
-        database_builder.print_stats()
+        print(self.species + "\t"+ "\t".join(database_builder.generate_stats()))
         
     def __del__(self):
         for d in self.directories_to_cleanup:
