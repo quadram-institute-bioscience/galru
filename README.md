@@ -84,6 +84,7 @@ bedtools
 samtools (1.3 or above)
 minimap2
 mlst (torstens)
+ncbi-genome-download 
 
 # pypi
 fastaq (from pyfastaq)
