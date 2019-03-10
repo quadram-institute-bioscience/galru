@@ -23,6 +23,7 @@ class GalruCreateSpecies:
         
     def download_species(self):
         download_directory = str(mkdtemp(dir=self.output_directory))
+        self.directories_to_cleanup.append(download_directory)
         
         cmd = " ".join(['ncbi-genome-download', '-o', download_directory, '--genus', '"'+ self.species +'"', '--parallel', str(self.threads), '-F', 'fasta', 'bacteria'])
         if self.verbose:
