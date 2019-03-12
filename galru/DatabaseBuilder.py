@@ -141,6 +141,7 @@ class DatabaseBuilder:
                 
             crispr_nucleotides_file = self.extract_nucleotides_from_gff(f, crispr_gff)
             self.append_crispr_file( crispr_nucleotides_file, f, self.combined_nucleotides, self.metadata_file,  mlst.database, mlst.st)
+            self.deleted_intermediate_files()
         
         return self
         
@@ -150,6 +151,11 @@ class DatabaseBuilder:
         stats = [str(self.skipped_st), str(self.skipped_no_crispr), str(len(self.input_files)), str(files_used)]
         return stats
         
+    def deleted_intermediate_files(self):
+        for f in self.files_to_cleanup:
+            if os.path.exists(f):
+                os.remove(f)
+        self.files_to_cleanup = []
 
     def __del__(self):
         for f in self.files_to_cleanup:
