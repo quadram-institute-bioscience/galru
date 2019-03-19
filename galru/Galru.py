@@ -59,7 +59,6 @@ class Galru:
         
         subprocess.check_output( cmd, shell=True)
         return reads_outputfile
-        
 
     def run(self):
         num_reads, num_bases = self.count_reads_and_bases()
@@ -85,15 +84,14 @@ class Galru:
                     num_reads += 1 
                     num_bases += len(record)
         else:
-            for record in SeqIO.parse(self.input_file, "fasta"):
-                num_reads += 1 
-                num_bases += len(record)
+            with open(self.input_file, "r") as handle:
+                for record in SeqIO.parse(handle, "fasta"):
+                    num_reads += 1 
+                    num_bases += len(record)
         return num_reads, num_bases
         
-
     def __del__(self):
         for f in self.files_to_cleanup:
             if os.path.exists(f):
                 os.remove(f)
-            
         

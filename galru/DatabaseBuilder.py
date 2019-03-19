@@ -84,14 +84,18 @@ class DatabaseBuilder:
         
     def next_sample_id(self, combined_nucleotides):
         if os.path.exists(combined_nucleotides):
-            all_ids = [int(record.id) for record in SeqIO.parse(combined_nucleotides, "fasta")]
+            all_ids = []
+            with open(combined_nucleotides, 'r') as combined_nucleotides_fh:
+                all_ids = [int(record.id) for record in SeqIO.parse(combined_nucleotides_fh, "fasta")]
             return max(all_ids) + 1
         else:
             return 1
             
     def seq_to_names(self, combined_nucleotides):
         if os.path.exists(combined_nucleotides):
-            all_seq = {str(record.seq): int(record.id) for record in SeqIO.parse(combined_nucleotides, "fasta")}
+            all_ids = []
+            with open(combined_nucleotides, 'r') as combined_nucleotides_fh:
+                all_seq = {str(record.seq): int(record.id) for record in SeqIO.parse(combined_nucleotides_fh, "fasta")}
             return all_seq
         else:
             return {}
@@ -100,8 +104,8 @@ class DatabaseBuilder:
         sequences_to_names = self.seq_to_names(combined_nucleotides)
         current_id = self.next_sample_id(combined_nucleotides)
             
-        with open(combined_nucleotides, "a+") as combined_fh, open(metadata_file, "a+") as metadata_fh:
-            for record in SeqIO.parse(crispr_nucleotides_file, "fasta"):
+        with open(combined_nucleotides, "a+") as combined_fh, open(metadata_file, "a+") as metadata_fh, open(crispr_nucleotides_file, 'r') as crispr_nucleotides_fh:
+            for record in SeqIO.parse(crispr_nucleotides_fh, "fasta"):
                 if str(record.seq) in sequences_to_names:
                     record.id = str(sequences_to_names[record.seq])
                     metadata_fh.write("\t".join([str(current_id), os.path.basename(input_fasta_file), record.description, database, st]) + "\n")
