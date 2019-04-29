@@ -158,7 +158,7 @@ class DatabaseBuilder:
                     metadata_fh.write(
                         "\t".join(
                             [
-                                str(current_id),
+                                str(sequences_to_names[str(record.seq)]),
                                 os.path.basename(input_fasta_file),
                                 record.description,
                                 database,
