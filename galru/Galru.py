@@ -22,6 +22,7 @@ class Galru:
         self.technology = options.technology
         self.threads = options.threads
         self.min_mapping_quality = options.min_mapping_quality
+        self.debug = options.debug
 
         self.database_directory = Schemas().database_directory(
             options.db_dir, options.species
@@ -150,6 +151,7 @@ class Galru:
         return num_reads, num_bases
 
     def __del__(self):
-        for f in self.files_to_cleanup:
-            if os.path.exists(f):
-                os.remove(f)
+        if not self.debug:
+            for f in self.files_to_cleanup:
+                if os.path.exists(f):
+                    os.remove(f)

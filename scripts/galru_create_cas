@@ -23,7 +23,8 @@ parser.add_argument('input_files', help='Input FASTA files containing nucleotide
 
 
 parser.add_argument('--cdhit_seq_identity', '-i',  help='Sequence identity for CD-hit', type=float, default=0.99)
-parser.add_argument('--verbose', '-v', action='store_true', help='Turn on debugging [%(default)s]', default = False)
+parser.add_argument('--debug', action='store_true', help='Turn on debugging and save intermediate files', default = False)
+parser.add_argument('--verbose', '-v', action='store_true', help='Turn on verbose output', default = False)
 parser.add_argument('--version', action='version', version=str(version))
 options = parser.parse_args()
 

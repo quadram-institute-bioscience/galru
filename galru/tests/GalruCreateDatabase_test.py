@@ -9,12 +9,13 @@ data_dir = os.path.join(test_modules_dir, "data", "galru_create_database")
 
 
 class TestOptions:
-    def __init__(self, input_files, output_directory, verbose, allow_missing_st):
+    def __init__(self, input_files, output_directory, verbose, allow_missing_st, debug):
         self.input_files = input_files
         self.output_directory = output_directory
         self.verbose = verbose
         self.threads = 1
         self.allow_missing_st = allow_missing_st
+        self.debug = debug
 
 
 class TestGalruCreateDatabase(unittest.TestCase):
@@ -24,7 +25,7 @@ class TestGalruCreateDatabase(unittest.TestCase):
             shutil.rmtree("output_db")
         g = GalruCreateDatabase(
             TestOptions(
-                [os.path.join(data_dir, "sample1.fa")], "output_db", False, True
+                [os.path.join(data_dir, "sample1.fa")], "output_db", False, True, False
             )
         )
         g.run()
@@ -54,7 +55,7 @@ class TestGalruCreateDatabase(unittest.TestCase):
             shutil.rmtree("output_db")
         g = GalruCreateDatabase(
             TestOptions(
-                [os.path.join(data_dir, "sample1.fa.gz")], "output_db", False, True
+                [os.path.join(data_dir, "sample1.fa.gz")], "output_db", False, True, False
             )
         )
         g.run()

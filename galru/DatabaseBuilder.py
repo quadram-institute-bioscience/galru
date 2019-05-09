@@ -15,13 +15,14 @@ from galru.Mlst import Mlst
 
 class DatabaseBuilder:
     def __init__(
-        self, input_files, output_directory, verbose, threads, allow_missing_st
+        self, input_files, output_directory, verbose, threads, allow_missing_st, debug
     ):
         self.input_files = input_files
         self.output_directory = output_directory
         self.verbose = verbose
         self.threads = threads
         self.allow_missing_st = allow_missing_st
+        self.debug = debug
         self.files_to_cleanup = []
 
         self.combined_nucleotides = os.path.join(
@@ -243,6 +244,7 @@ class DatabaseBuilder:
         self.files_to_cleanup = []
 
     def __del__(self):
-        for f in self.files_to_cleanup:
-            if os.path.exists(f):
-                os.remove(f)
+        if not self.debug:
+            for f in self.files_to_cleanup:
+                if os.path.exists(f):
+                    os.remove(f)

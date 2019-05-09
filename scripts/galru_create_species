@@ -26,7 +26,8 @@ parser.add_argument('--threads', '-t',  help='No. of threads to use', type=int, 
 parser.add_argument('--assembly_level', '-l',  help='Assembly level', type=str, default='complete', choices=['all', 'complete','chromosome', 'scaffold',  'contig'])
 parser.add_argument('--cdhit_seq_identity', '-i',  help='Sequence identity for CD-hit', type=float, default=0.99)
 parser.add_argument('--allow_missing_st', '-a', action='store_true', help='Use files with missing ST [%(default)s]', default = False)
-parser.add_argument('--verbose', '-v', action='store_true', help='Turn on debugging [%(default)s]', default = False)
+parser.add_argument('--debug', action='store_true', help='Turn on debugging and save intermediate files', default = False)
+parser.add_argument('--verbose', '-v', action='store_true', help='Turn on verbose output', default = False)
 parser.add_argument('--version', action='version', version=str(version))
 
 options = parser.parse_args()

@@ -10,6 +10,7 @@ class GalruCreateCas:
         self.output_filename = options.output_filename
         self.verbose = options.verbose
         self.cdhit_seq_identity = options.cdhit_seq_identity
+        self.debug = options.debug
         self.files_to_cleanup = []
 
     # ToDo: Find Cas genes in a more intelligent way
@@ -84,6 +85,7 @@ class GalruCreateCas:
         return self
 
     def __del__(self):
-        for f in self.files_to_cleanup:
-            if os.path.exists(f):
-                os.remove(f)
+        if not self.debug:
+            for f in self.files_to_cleanup:
+                if os.path.exists(f):
+                    os.remove(f)

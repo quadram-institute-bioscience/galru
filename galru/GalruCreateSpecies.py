@@ -8,11 +8,12 @@ from galru.GalruCreateCas import GalruCreateCas
 
 
 class CasOptions:
-    def __init__(self, input_files, output_filename, verbose, cdhit_seq_identity):
+    def __init__(self, input_files, output_filename, verbose, cdhit_seq_identity, debug):
         self.input_files = input_files
         self.output_filename = output_filename
         self.verbose = verbose
         self.cdhit_seq_identity = cdhit_seq_identity
+        self.debug = debug
 
 class GalruCreateSpecies:
     def __init__(self, options):
@@ -23,6 +24,7 @@ class GalruCreateSpecies:
         self.allow_missing_st = options.allow_missing_st
         self.cdhit_seq_identity = options.cdhit_seq_identity
         self.assembly_level = options.assembly_level
+        self.debug = options.debug
 
         if self.output_directory is None:
             self.output_directory = re.sub("[^a-zA-Z0-9]+", "_", self.species)
@@ -95,12 +97,14 @@ class GalruCreateSpecies:
                 input_files,
                 os.join(self.output_directory, "cas.fa"),
                 self.verbose,
-                self.cdhit_seq_identity
+                self.cdhit_seq_identity,
+                self.debug
             )
         )
         g.run()
 
     def __del__(self):
-        for d in self.directories_to_cleanup:
-            if os.path.exists(d):
-                shutil.rmtree(d)
+        if not self.debug:
+            for d in self.directories_to_cleanup:
+                if os.path.exists(d):
+                    shutil.rmtree(d)

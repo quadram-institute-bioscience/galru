@@ -7,6 +7,7 @@ class GalruCreateDatabase:
         self.output_directory = options.output_directory
         self.verbose = options.verbose
         self.threads = options.threads
+        self.debug = options.debug
         self.allow_missing_st = options.allow_missing_st
 
     def run(self):
@@ -16,6 +17,7 @@ class GalruCreateDatabase:
             self.verbose,
             self.threads,
             self.allow_missing_st,
+            self.debug
         )
 
         database_builder.run()
