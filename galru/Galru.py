@@ -26,9 +26,9 @@ class Galru:
         )
 
         if self.cas_fasta is None:
-            self.cas_fasta = str(
-                pkg_resources.resource_filename(__name__, "data/cas.fa.gz")
-            )
+            self.cas_fasta = os.path.join(
+            self.database_directory, "cas.fa"
+        )
 
         self.files_to_cleanup = []
 
@@ -97,10 +97,6 @@ class Galru:
                 self.redirect_output,
             ]
         )
-		
-		
-
-		
 		
         if self.verbose:
             print(cmd)
