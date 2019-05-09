@@ -24,7 +24,7 @@ parser.add_argument('species',  help='Species name, use galru_species to see all
 parser.add_argument('input_file', help='Input FASTQ file of uncorrected long reads (optionally gzipped)', type=str)
 
 # Input
-parser.add_argument('--min_mapping_quality',  help='Minimum mapping quality score', type=int, default = 0 )
+parser.add_argument('--min_mapping_quality', '-m',  help='Minimum mapping quality score', type=int, default = 1 )
 parser.add_argument('--db_dir', '-d',  help='Base directory for species databases, defaults to bundled', type=str )
 parser.add_argument('--cas_fasta', '-c',  help='Cas gene FASTA file (optionally gzipped), defaults to bundled', type=str )
 parser.add_argument('--threads', '-t',  help='No. of threads to use', type=int, default=1)
