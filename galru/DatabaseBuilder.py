@@ -74,7 +74,7 @@ class DatabaseBuilder:
             ]
         )
         if self.verbose:
-            print(cmd)
+            print("Finding CRISPRs in a file:\t"+cmd)
 
         subprocess.check_output(cmd, shell=True)
         return crispr_gff_outputfile
@@ -109,7 +109,7 @@ class DatabaseBuilder:
             ]
         )
         if self.verbose:
-            print(cmd)
+            print("Extract nucl sequence of CRISPR region\t" + cmd)
 
         subprocess.check_output(cmd, shell=True)
         return outputfile

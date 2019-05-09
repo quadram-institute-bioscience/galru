@@ -22,6 +22,7 @@ parser.add_argument('output_filename', help='Output filename for the Cas FASTA f
 parser.add_argument('input_files', help='Input FASTA files containing nucleotides of CDS (optionally gzipped)', nargs='+', type=str)
 
 
+parser.add_argument('--threads', '-t',  help='No. of threads to use', type=int, default=1)
 parser.add_argument('--cdhit_seq_identity', '-i',  help='Sequence identity for CD-hit', type=float, default=0.99)
 parser.add_argument('--debug', action='store_true', help='Turn on debugging and save intermediate files', default = False)
 parser.add_argument('--verbose', '-v', action='store_true', help='Turn on verbose output', default = False)

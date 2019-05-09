@@ -9,6 +9,7 @@ class GalruCreateCas:
         self.input_files = options.input_files
         self.output_filename = options.output_filename
         self.verbose = options.verbose
+        self.threads = options.threads
         self.cdhit_seq_identity = options.cdhit_seq_identity
         self.debug = options.debug
         self.files_to_cleanup = []
@@ -40,7 +41,7 @@ class GalruCreateCas:
             ]
         )
         if self.verbose:
-            print(cmd)
+            print("Extract CAS genes:\t" + cmd)
 
         subprocess.check_output(cmd, shell=True)
         return single_filtered_outputfile
@@ -62,9 +63,9 @@ class GalruCreateCas:
         # The temp fasta file gets moved so no need to clean it up
         self.files_to_cleanup.append(compress_outputfile + ".clstr")
 
-        cmd = " ".join(["cd-hit-est", "-c", str(self.cdhit_seq_identity), "-i", input_fasta, "-o", compress_outputfile])
+        cmd = " ".join(["cd-hit-est", "-T",str(self.threads), "-c", str(self.cdhit_seq_identity), "-i", input_fasta, "-o", compress_outputfile])
         if self.verbose:
-            print(cmd)
+            print("Clustering the CAS genes:\t" + cmd)
 
         subprocess.check_output(cmd, shell=True)
         return compress_outputfile

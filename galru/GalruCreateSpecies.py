@@ -55,7 +55,7 @@ class GalruCreateSpecies:
             ]
         )
         if self.verbose:
-            print(cmd)
+            print("Download genomes from NCBI:\t"+ cmd)
         subprocess.check_output(cmd, shell=True)
         return download_directory
 
@@ -98,7 +98,8 @@ class GalruCreateSpecies:
                 os.join(self.output_directory, "cas.fa"),
                 self.verbose,
                 self.cdhit_seq_identity,
-                self.debug
+                self.debug,
+                self.threads
             )
         )
         g.run()

@@ -75,7 +75,7 @@ class Galru:
             ]
         )
         if self.verbose:
-            print(cmd)
+            print("Identify reads containing CAS genes:\t" + cmd)
 
         subprocess.check_output(cmd, shell=True)
         return reads_outputfile
@@ -113,7 +113,7 @@ class Galru:
         )
 		
         if self.verbose:
-            print(cmd)
+            print("Map reads to CRISPRs:\t" + cmd)
 
         subprocess.check_output(cmd, shell=True)
         return reads_outputfile

@@ -9,12 +9,13 @@ data_dir = os.path.join(test_modules_dir, "data", "galru_create_cas")
 
 
 class TestOptions:
-    def __init__(self, input_files, output_filename, verbose, cdhit_seq_identity,debug):
+    def __init__(self, input_files, output_filename, verbose, cdhit_seq_identity,debug, threads):
         self.input_files = input_files
         self.output_filename = output_filename
         self.verbose = verbose
         self.cdhit_seq_identity = cdhit_seq_identity
         self.debug = debug
+        self.threads = threads
 
 
 class TestGalruCreateCas(unittest.TestCase):
@@ -28,7 +29,8 @@ class TestGalruCreateCas(unittest.TestCase):
                 "output_filename",
                 False,
                 0.9,
-                False
+                False,
+                1
             )
         )
         g.run()

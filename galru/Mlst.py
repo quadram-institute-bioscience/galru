@@ -11,9 +11,9 @@ class Mlst:
         self.database, self.st = self.parse_output(self.script_output)
 
     def mlst_output(self):
-        cmd = " ".join(["mlst", "--nopath", "--quiet", self.filename])
+        cmd = " ".join(["mlst","--threads", str(self.threads), "--nopath", "--quiet", self.filename])
         if self.verbose:
-            print(cmd)
+            print("Calculating MLST:\t" + cmd)
         output = subprocess.check_output(cmd, shell=True)
         return output.decode("utf-8")
 
