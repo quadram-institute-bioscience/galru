@@ -23,6 +23,7 @@ class Galru:
         self.threads = options.threads
         self.min_mapping_quality = options.min_mapping_quality
         self.debug = options.debug
+        self.gene_start_offset = options.gene_start_offset
 
         self.database_directory = Schemas().database_directory(
             options.db_dir, options.species
@@ -106,6 +107,9 @@ class Galru:
                 "-F",
                 "4",
                 "-",
+                "|",
+                "awk",
+                "'{if($4 <= " + str(self.gene_start_offset) + ") print $0}'",
                 ">",
                 reads_outputfile,
                 self.redirect_output,

@@ -20,7 +20,8 @@ class TestOptions:
         output_file,
         verbose,
         min_mapping_quality,
-        debug
+        debug, 
+        gene_start_offset
     ):
         self.species = species
         self.input_file = input_file
@@ -32,6 +33,7 @@ class TestOptions:
         self.verbose = verbose
         self.min_mapping_quality = min_mapping_quality
         self.debug = debug
+        self.gene_start_offset = gene_start_offset
 
 
 class TestGalru(unittest.TestCase):
@@ -47,7 +49,8 @@ class TestGalru(unittest.TestCase):
                 "output_file",
                 False,
                 0,
-                False
+                False,
+                1000
             )
         )
         g.run()
