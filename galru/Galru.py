@@ -20,6 +20,8 @@ class Galru:
         self.verbose = options.verbose
         self.output_file = options.output_file
         self.technology = options.technology
+        self.threads = options.threads
+        self.min_mapping_quality = options.min_mapping_quality
 
         self.database_directory = Schemas().database_directory(
             options.db_dir, options.species
@@ -53,12 +55,16 @@ class Galru:
                 "minimap2",
                 "-x",
                 self.technology,
+				"-t",
+				str(self.threads),
                 "-a",
                 self.cas_fasta,
                 self.input_file,
                 "|",
                 "samtools",
                 "fasta",
+				"--threads",
+				str(self.threads),
                 "-F",
                 "4",
                 "-",
@@ -83,12 +89,19 @@ class Galru:
                 "minimap2",
                 "-x",
                 self.technology,
+				"--secondary=no",
+				"-t",
+				str(self.threads),
                 "-a",
                 self.crisprs_file,
                 cas_reads,
                 "|",
                 "samtools",
                 "view",
+				"--threads",
+				str(self.threads),
+				"-q",
+				str(self.min_mapping_quality),
                 "-F",
                 "4",
                 "-",

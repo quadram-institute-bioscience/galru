@@ -19,6 +19,7 @@ class TestOptions:
         technology,
         output_file,
         verbose,
+        min_mapping_quality
     ):
         self.species = species
         self.input_file = input_file
@@ -28,6 +29,7 @@ class TestOptions:
         self.technology = technology
         self.output_file = output_file
         self.verbose = verbose
+        self.min_mapping_quality = min_mapping_quality
 
 
 class TestGalru(unittest.TestCase):
@@ -42,6 +44,7 @@ class TestGalru(unittest.TestCase):
                 "map-ont",
                 "output_file",
                 False,
+                0
             )
         )
         g.run()
