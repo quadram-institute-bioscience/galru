@@ -97,6 +97,11 @@ class Galru:
                 self.redirect_output,
             ]
         )
+		
+		
+
+		
+		
         if self.verbose:
             print(cmd)
 

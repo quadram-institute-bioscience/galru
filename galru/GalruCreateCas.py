@@ -9,6 +9,7 @@ class GalruCreateCas:
         self.input_files = options.input_files
         self.output_filename = options.output_filename
         self.verbose = options.verbose
+        self.cdhit_seq_identity = options.cdhit_seq_identity
         self.files_to_cleanup = []
 
     # ToDo: Find Cas genes in a more intelligent way
@@ -60,7 +61,7 @@ class GalruCreateCas:
         # The temp fasta file gets moved so no need to clean it up
         self.files_to_cleanup.append(compress_outputfile + ".clstr")
 
-        cmd = " ".join(["cd-hit-est", "-i", input_fasta, "-o", compress_outputfile])
+        cmd = " ".join(["cd-hit-est", "-c", str(self.cdhit_seq_identity), "-i", input_fasta, "-o", compress_outputfile])
         if self.verbose:
             print(cmd)
 
