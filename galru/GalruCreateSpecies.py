@@ -22,6 +22,7 @@ class GalruCreateSpecies:
         self.threads = options.threads
         self.allow_missing_st = options.allow_missing_st
         self.cdhit_seq_identity = options.cdhit_seq_identity
+        self.assembly_level = options.assembly_level
 
         if self.output_directory is None:
             self.output_directory = re.sub("[^a-zA-Z0-9]+", "_", self.species)
@@ -44,6 +45,8 @@ class GalruCreateSpecies:
                 '"' + self.species + '"',
                 "--parallel",
                 str(self.threads),
+                "--assembly-level",
+                self.assembly_level,
                 "-F",
                 "fasta,cds-fasta",
                 "bacteria",
@@ -66,7 +69,7 @@ class GalruCreateSpecies:
         input_files = []
         for root, dirs, files in os.walk(download_directory):
             for file in files:
-                if file.endswith("ffn.gz"):
+                if file.endswith("cds_from_genomic.fna.gz"):
                     input_files.append(os.path.join(root, file))
         return input_files
 
