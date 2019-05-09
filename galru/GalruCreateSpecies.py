@@ -95,7 +95,7 @@ class GalruCreateSpecies:
         g = GalruCreateCas(
             CasOptions(
                 input_files,
-                os.join(self.output_directory, "cas.fa"),
+                os.path.join(self.output_directory, "cas.fa"),
                 self.verbose,
                 self.cdhit_seq_identity,
                 self.debug,
