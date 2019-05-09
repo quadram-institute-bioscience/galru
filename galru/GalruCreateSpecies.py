@@ -4,7 +4,15 @@ import subprocess
 import shutil
 from tempfile import mkdtemp
 from galru.DatabaseBuilder import DatabaseBuilder
+from galru.GalruCreateCas import GalruCreateCas
 
+
+class CasOptions:
+    def __init__(self, input_files, output_filename, verbose, cdhit_seq_identity):
+        self.input_files = input_files
+        self.output_filename = output_filename
+        self.verbose = verbose
+        self.cdhit_seq_identity = cdhit_seq_identity
 
 class GalruCreateSpecies:
     def __init__(self, options):
@@ -13,6 +21,7 @@ class GalruCreateSpecies:
         self.verbose = options.verbose
         self.threads = options.threads
         self.allow_missing_st = options.allow_missing_st
+        self.cdhit_seq_identity = options.cdhit_seq_identity
 
         if self.output_directory is None:
             self.output_directory = re.sub("[^a-zA-Z0-9]+", "_", self.species)
@@ -36,7 +45,7 @@ class GalruCreateSpecies:
                 "--parallel",
                 str(self.threads),
                 "-F",
-                "fasta",
+                "fasta,cds-fasta",
                 "bacteria",
             ]
         )
@@ -50,6 +59,14 @@ class GalruCreateSpecies:
         for root, dirs, files in os.walk(download_directory):
             for file in files:
                 if file.endswith("genomic.fna.gz"):
+                    input_files.append(os.path.join(root, file))
+        return input_files
+        
+    def find_cds_fasta_files(self, download_directory):
+        input_files = []
+        for root, dirs, files in os.walk(download_directory):
+            for file in files:
+                if file.endswith("ffn.gz"):
                     input_files.append(os.path.join(root, file))
         return input_files
 
@@ -66,6 +83,19 @@ class GalruCreateSpecies:
         )
         database_builder.run()
         print(self.species + "\t" + "\t".join(database_builder.generate_stats()))
+        
+        # build CAS database for species
+        cas_input_files = self.find_cds_fasta_files(download_directory)
+        
+        g = GalruCreateCas(
+            CasOptions(
+                input_files,
+                os.join(self.output_directory, "cas.fa"),
+                self.verbose,
+                self.cdhit_seq_identity
+            )
+        )
+        g.run()
 
     def __del__(self):
         for d in self.directories_to_cleanup:

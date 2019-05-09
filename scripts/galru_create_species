@@ -23,6 +23,7 @@ parser.add_argument('species', help='Species in quotes',  type=str)
 parser.add_argument('--output_directory', '-o', help='Output directory, defaults to species name in current directory', type=str)
 parser.add_argument('--threads', '-t',  help='No. of threads to use', type=int, default=1)
 
+parser.add_argument('--cdhit_seq_identity', '-i',  help='Sequence identity for CD-hit', type=float, default=0.99)
 parser.add_argument('--allow_missing_st', '-a', action='store_true', help='Use files with missing ST [%(default)s]', default = False)
 parser.add_argument('--verbose', '-v', action='store_true', help='Turn on debugging [%(default)s]', default = False)
 parser.add_argument('--version', action='version', version=str(version))
