@@ -44,6 +44,7 @@ class GalruCreateCas:
             print("Extract CAS genes:\t" + cmd)
 
         subprocess.check_output(cmd, shell=True)
+        os.close(fd)
         return single_filtered_outputfile
 
     # do it one file at a time so that you dont hit the limit on filenames passed on command line. Its a minor inefficiency.
@@ -56,6 +57,7 @@ class GalruCreateCas:
             if self.verbose:
                 print(cmd)
             subprocess.check_output(cmd, shell=True)
+        os.close(fd)
         return concat_outputfile
 
     def cluster_genes(self, input_fasta):
@@ -68,6 +70,7 @@ class GalruCreateCas:
             print("Clustering the CAS genes:\t" + cmd)
 
         subprocess.check_output(cmd, shell=True)
+        os.close(fd)
         return compress_outputfile
 
     def run(self):

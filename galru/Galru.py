@@ -78,6 +78,7 @@ class Galru:
             print("Identify reads containing CAS genes:\t" + cmd)
 
         subprocess.check_output(cmd, shell=True)
+        os.close(fd)
         return reads_outputfile
 
     # map the cas gene reads to the reference database of crisprs
@@ -119,6 +120,7 @@ class Galru:
             print("Map reads to CRISPRs:\t" + cmd)
 
         subprocess.check_output(cmd, shell=True)
+        os.close(fd)
         return reads_outputfile
 
     def run(self):

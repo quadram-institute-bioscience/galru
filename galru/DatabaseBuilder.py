@@ -56,6 +56,7 @@ class DatabaseBuilder:
             subprocess.check_output(cmd, shell=True)
             self.files_to_cleanup.append(input_fasta_uncompressed)
             input_fasta = input_fasta_uncompressed
+            os.close(fd)
 
         fd, crispr_outputfile = mkstemp()
         crispr_gff_outputfile = crispr_outputfile + ".gff"
@@ -77,6 +78,7 @@ class DatabaseBuilder:
             print("Finding CRISPRs in a file:\t"+cmd)
 
         subprocess.check_output(cmd, shell=True)
+        os.close(fd)
         return crispr_gff_outputfile
 
     def extract_nucleotides_from_gff(self, input_fasta, gff_file):
@@ -91,6 +93,7 @@ class DatabaseBuilder:
             subprocess.check_output(cmd, shell=True)
             self.files_to_cleanup.append(input_fasta_uncompressed)
             input_fasta = input_fasta_uncompressed
+            os.close(fd)
 
         fd, outputfile = mkstemp()
         self.files_to_cleanup.append(outputfile)
@@ -112,6 +115,7 @@ class DatabaseBuilder:
             print("Extract nucl sequence of CRISPR region\t" + cmd)
 
         subprocess.check_output(cmd, shell=True)
+        os.close(fd)
         return outputfile
 
     def next_sample_id(self, combined_nucleotides):

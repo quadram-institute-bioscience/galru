@@ -47,11 +47,13 @@ docker run --rm -it -v /path/to/example_data:/example_data andrewjpage/galru gal
 
 ## Quick start
 
-# galru create database
-cds-fasta
-
-
 ## galru
+
+# galru create database
+
+
+
+
 
 
 
