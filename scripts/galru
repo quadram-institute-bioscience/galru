@@ -24,27 +24,26 @@ parser.add_argument('species',  help='Species name, use galru_species to see all
 parser.add_argument('input_file', help='Input FASTQ file of uncorrected long reads (optionally gzipped)', type=str)
 
 # Input
-
-
-parser.add_argument('--gene_start_offset', '-g',  help='Only count CRISPR reads which cover this base', type=int, default = 15 )
-
-parser.add_argument('--min_mapping_quality', '-m',  help='Minimum mapping quality score', type=int, default = 1 )
 parser.add_argument('--db_dir', '-d',  help='Base directory for species databases, defaults to bundled', type=str )
 parser.add_argument('--cas_fasta', '-c',  help='Cas gene FASTA file (optionally gzipped), defaults to bundled', type=str )
-parser.add_argument('--threads', '-t',  help='No. of threads to use', type=int, default=1)
 parser.add_argument('--technology', '-y',  help='Sequencing technology', type=str, default='map-ont', choices=['map-ont','map-pb', 'ava-pb', 'ava-ont'])
+parser.add_argument('--threads', '-t',  help='No. of threads to use', type=int, default=1)
 
 # Output
 parser.add_argument('--output_file', '-o',  help='Output filename, defaults to STDOUT', type=str)
 
 # Advanced
+
+parser.add_argument('--gene_start_offset', '-g',  help='Only count CRISPR reads which cover this base', type=int, default = 15 )
+parser.add_argument('--min_mapping_quality', '-m',  help='Minimum mapping quality score', type=int, default = 1 )
+
 parser.add_argument('--debug', action='store_true', help='Turn on debugging and save intermediate files', default = False)
 parser.add_argument('--verbose', '-v', action='store_true', help='Turn on verbose output', default = False)
 parser.add_argument('--version', action='version', version=str(version))
 
 options = parser.parse_args()
 
-if options.verbose:
+if options.debug:
     import cProfile, pstats, io
     pr = cProfile.Profile()
     pr.enable()

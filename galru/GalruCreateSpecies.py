@@ -8,12 +8,13 @@ from galru.GalruCreateCas import GalruCreateCas
 
 
 class CasOptions:
-    def __init__(self, input_files, output_filename, verbose, cdhit_seq_identity, debug):
+    def __init__(self, input_files, output_filename, verbose, cdhit_seq_identity, debug, threads ):
         self.input_files = input_files
         self.output_filename = output_filename
         self.verbose = verbose
         self.cdhit_seq_identity = cdhit_seq_identity
         self.debug = debug
+        self.threads = threads
 
 class GalruCreateSpecies:
     def __init__(self, options):
@@ -25,6 +26,7 @@ class GalruCreateSpecies:
         self.cdhit_seq_identity = options.cdhit_seq_identity
         self.assembly_level = options.assembly_level
         self.debug = options.debug
+        self.refseq_category = options.refseq_category
 
         if self.output_directory is None:
             self.output_directory = re.sub("[^a-zA-Z0-9]+", "_", self.species)
@@ -49,6 +51,8 @@ class GalruCreateSpecies:
                 str(self.threads),
                 "--assembly-level",
                 self.assembly_level,
+                "-R",
+                self.refseq_category,
                 "-F",
                 "fasta,cds-fasta",
                 "bacteria",
@@ -85,6 +89,7 @@ class GalruCreateSpecies:
             self.verbose,
             self.threads,
             self.allow_missing_st,
+            self.debug
         )
         database_builder.run()
         print(self.species + "\t" + "\t".join(database_builder.generate_stats()))

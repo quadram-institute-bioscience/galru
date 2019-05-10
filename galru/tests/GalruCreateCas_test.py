@@ -2,6 +2,7 @@ import unittest
 import os
 import shutil
 import filecmp
+import subprocess
 from galru.GalruCreateCas import GalruCreateCas
 
 test_modules_dir = os.path.dirname(os.path.realpath(__file__))
@@ -34,7 +35,10 @@ class TestGalruCreateCas(unittest.TestCase):
             )
         )
         g.run()
-        self.assertTrue(os.path.exists("output_filename"))
+        self.assertTrue(os.path.exists("output_filename.gz"))
+        
+        subprocess.check_output("gunzip output_filename.gz", shell=True)
+        
         self.assertTrue(
             filecmp.cmp(
                 "output_filename", os.path.join(data_dir, "expected_output_filename")

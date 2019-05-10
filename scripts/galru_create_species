@@ -23,6 +23,7 @@ parser.add_argument('species', help='Species in quotes',  type=str)
 parser.add_argument('--output_directory', '-o', help='Output directory, defaults to species name in current directory', type=str)
 parser.add_argument('--threads', '-t',  help='No. of threads to use', type=int, default=1)
 
+parser.add_argument('--refseq_category','-c',  help='Sequencing technology', type=str, default='all', choices=['all','reference','representative'])
 parser.add_argument('--assembly_level', '-l',  help='Assembly level', type=str, default='complete', choices=['all', 'complete','chromosome', 'scaffold',  'contig'])
 parser.add_argument('--cdhit_seq_identity', '-i',  help='Sequence identity for CD-hit', type=float, default=0.99)
 parser.add_argument('--allow_missing_st', '-a', action='store_true', help='Use files with missing ST [%(default)s]', default = False)
@@ -32,6 +33,21 @@ parser.add_argument('--version', action='version', version=str(version))
 
 options = parser.parse_args()
 
-g = GalruCreateSpecies(options)
-g.run()
+if options.debug:
+    import cProfile, pstats, io
+    pr = cProfile.Profile()
+    pr.enable()
+    
+    g = GalruCreateSpecies(options)
+    g.run()
+    
+    pr.disable()
+    s = io.StringIO()
+    sortby = 'cumulative'
+    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    ps.print_stats()
+    print(s.getvalue())
+else:
+    g = GalruCreateSpecies(options)
+    g.run()
 

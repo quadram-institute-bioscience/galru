@@ -12,7 +12,6 @@ from galru.Schemas import Schemas
 
 # map all the reads to the Cas genes. Any reads that map are them mapped against the CRISPRs
 
-
 class Galru:
     def __init__(self, options):
         self.input_file = options.input_file
@@ -31,7 +30,7 @@ class Galru:
 
         if self.cas_fasta is None:
             self.cas_fasta = os.path.join(
-            self.database_directory, "cas.fa"
+            self.database_directory, "cas.fa.gz"
         )
 
         self.files_to_cleanup = []

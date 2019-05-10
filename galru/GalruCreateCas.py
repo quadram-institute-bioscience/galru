@@ -81,6 +81,12 @@ class GalruCreateCas:
         clustered_fasta = self.cluster_genes(merged_cas_fasta)
         if os.path.exists(clustered_fasta):
             shutil.move(clustered_fasta, self.output_filename)
+            
+            cmd = " ".join(["gzip", self.output_filename])
+            if self.verbose:
+                print("Compressing CAS gene FASTA file:\t" + cmd)
+            subprocess.check_output(cmd, shell=True)
+            
         else:
             print("Failed to create file")
         return self
