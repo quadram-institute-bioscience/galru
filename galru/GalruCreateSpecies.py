@@ -67,7 +67,9 @@ class GalruCreateSpecies:
         input_files = []
         for root, dirs, files in os.walk(download_directory):
             for file in files:
-                if file.endswith("genomic.fna.gz"):
+                if file.endswith("cds_from_genomic.fna.gz"):
+                    continue
+                elif file.endswith("genomic.fna.gz"):
                     input_files.append(os.path.join(root, file))
         return input_files
         

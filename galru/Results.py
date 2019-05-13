@@ -3,16 +3,16 @@ import csv
 
 
 class Results:
-    def __init__(self, mapping_output_file, metadata_file, summerise):
+    def __init__(self, mapping_output_file, metadata_file, extended_results):
         self.mapping_output_file = mapping_output_file
         self.metadata_file = metadata_file
-        self.summerise = summerise
+        self.extended_results = extended_results
 
-    def results(self):
-        if self.summerise:
-            return self.summerised_results()
+    def results(self, num_input_reads):
+        if self.extended_results:
+            return self.extended_results(num_input_reads)
         else:
-            return self.extended_results()
+            return self.summerised_results(num_input_reads)
 
     def summerised_results(self, num_input_reads):
         results = {}
