@@ -23,6 +23,7 @@ class Galru:
         self.min_mapping_quality = options.min_mapping_quality
         self.debug = options.debug
         self.gene_start_offset = options.gene_start_offset
+        self.extended_results = options.extended_results
 
         self.database_directory = Schemas().database_directory(
             options.db_dir, options.species
@@ -127,7 +128,7 @@ class Galru:
         num_reads, num_bases = self.count_reads_and_bases()
         cas_reads = self.reads_with_cas_genes()
         crispr_mapping = self.map_reads_to_crisprs(cas_reads)
-        r = Results(crispr_mapping, self.metadata_file, True).summerised_results(
+        r = Results(crispr_mapping, self.metadata_file, self.extended_results).results(
             num_reads
         )
         print(r)

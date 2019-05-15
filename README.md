@@ -49,12 +49,115 @@ docker run --rm -it -v /path/to/example_data:/example_data andrewjpage/galru gal
 
 ## galru
 
-# galru create database
+"""
+usage: galru [options] database uncorrected_long_reads.fastq
 
+Identify CRISPR types from uncorrected long reads
 
+positional arguments:
+  species               Species name, use galru_species to see all available
+  input_file            Input FASTQ file of uncorrected long reads (optionally
+                        gzipped)
 
+optional arguments:
+  -h, --help            show this help message and exit
+  --db_dir DB_DIR, -d DB_DIR
+                        Base directory for species databases, defaults to
+                        bundled (default: None)
+  --cas_fasta CAS_FASTA, -c CAS_FASTA
+                        Cas gene FASTA file (optionally gzipped), defaults to
+                        bundled (default: None)
+  --technology {map-ont,map-pb,ava-pb,ava-ont}, -y {map-ont,map-pb,ava-pb,ava-ont}
+                        Sequencing technology (default: map-ont)
+  --threads THREADS, -t THREADS
+                        No. of threads to use (default: 1)
+  --output_file OUTPUT_FILE, -o OUTPUT_FILE
+                        Output filename, defaults to STDOUT (default: None)
+  --gene_start_offset GENE_START_OFFSET, -g GENE_START_OFFSET
+                        Only count CRISPR reads which cover this base
+                        (default: 15)
+  --min_mapping_quality MIN_MAPPING_QUALITY, -m MIN_MAPPING_QUALITY
+                        Minimum mapping quality score (default: 1)
+  --debug               Turn on debugging and save intermediate files
+                        (default: False)
+  --verbose, -v         Turn on verbose output (default: False)
+  --version             show program's version number and exit
+"""
 
+# Galru create database
+"""
+usage: galru_create_database [options] "species"
 
+Given a species name, create a database
+
+positional arguments:
+  species               Species in quotes
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --output_directory OUTPUT_DIRECTORY, -o OUTPUT_DIRECTORY
+                        Output directory, defaults to species name in current
+                        directory (default: None)
+  --threads THREADS, -t THREADS
+                        No. of threads to use (default: 1)
+  --refseq_category {all,reference,representative}, -c {all,reference,representative}
+                        Sequencing technology (default: all)
+  --assembly_level {all,complete,chromosome,scaffold,contig}, -l {all,complete,chromosome,scaffold,contig}
+                        Assembly level (default: complete)
+  --cdhit_seq_identity CDHIT_SEQ_IDENTITY, -i CDHIT_SEQ_IDENTITY
+                        Sequence identity for CD-hit (default: 0.99)
+  --allow_missing_st, -a
+                        Use files with missing ST [False]
+  --debug               Turn on debugging and save intermediate files
+                        (default: False)
+  --verbose, -v         Turn on verbose output (default: False)
+  --version             show program's version number and exit
+
+"""
+
+## Galru create species
+"""
+usage: galru_create_database [options] "species"
+
+Given a species name, create a database
+
+positional arguments:
+  species               Species in quotes
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --output_directory OUTPUT_DIRECTORY, -o OUTPUT_DIRECTORY
+                        Output directory, defaults to species name in current
+                        directory (default: None)
+  --threads THREADS, -t THREADS
+                        No. of threads to use (default: 1)
+  --refseq_category {all,reference,representative}, -c {all,reference,representative}
+                        Sequencing technology (default: all)
+  --assembly_level {all,complete,chromosome,scaffold,contig}, -l {all,complete,chromosome,scaffold,contig}
+                        Assembly level (default: complete)
+  --cdhit_seq_identity CDHIT_SEQ_IDENTITY, -i CDHIT_SEQ_IDENTITY
+                        Sequence identity for CD-hit (default: 0.99)
+  --allow_missing_st, -a
+                        Use files with missing ST [False]
+  --debug               Turn on debugging and save intermediate files
+                        (default: False)
+  --verbose, -v         Turn on verbose output (default: False)
+  --version             show program's version number and exit
+"""
+
+## Galru species
+"""
+usage: galru_genera [options]
+
+List all available genera
+
+optional arguments:
+  -h, --help     show this help message and exit
+  --debug        Turn on debugging and save intermediate files (default:
+                 False)
+  --verbose, -v  Turn on verbose output (default: False)
+  --version      show program's version number and exit
+"""
 
 
 
