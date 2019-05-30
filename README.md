@@ -15,7 +15,11 @@
   * [Citation](#citation)
 
 ## Introduction
-Galru allows you to 
+Galru is a Python 3 program that defines CRISPR spacer repertoire directly from uncorrected metagenomic long reads.
+
+Galru first identifies long reads that map to CRISPR-associated genes and 
+searches along the read for the CRISPR spacer array. This array is compared
+ to a database of known arrays to identify the sequence type (MLST).
 
 # Installation
 If you just want to quickly try out the software please try a Docker continer. This software is designed to run on Linux and OSX. It will not run on Windows.
@@ -49,7 +53,7 @@ docker run --rm -it -v /path/to/example_data:/example_data andrewjpage/galru gal
 
 ## galru
 
-"""
+```
 usage: galru [options] database uncorrected_long_reads.fastq
 
 Identify CRISPR types from uncorrected long reads
@@ -82,10 +86,11 @@ optional arguments:
                         (default: False)
   --verbose, -v         Turn on verbose output (default: False)
   --version             show program's version number and exit
-"""
+```
 
 # Galru create database
-"""
+
+```
 usage: galru_create_database [options] "species"
 
 Given a species name, create a database
@@ -113,10 +118,10 @@ optional arguments:
   --verbose, -v         Turn on verbose output (default: False)
   --version             show program's version number and exit
 
-"""
+```
 
 ## Galru create species
-"""
+```
 usage: galru_create_database [options] "species"
 
 Given a species name, create a database
@@ -143,10 +148,10 @@ optional arguments:
                         (default: False)
   --verbose, -v         Turn on verbose output (default: False)
   --version             show program's version number and exit
-"""
+```
 
 ## Galru species
-"""
+```
 usage: galru_genera [options]
 
 List all available genera
@@ -157,9 +162,7 @@ optional arguments:
                  False)
   --verbose, -v  Turn on verbose output (default: False)
   --version      show program's version number and exit
-"""
-
-
+```
 
 
 # License
@@ -178,22 +181,22 @@ Coming soon
 [galrú](https://www.teanglann.ie/en/fgb/galr%C3%BA) (Gal-roo) is the word for infection in Irish (Gaeilge). 
 
 
-# External Dependancies
-## system
-grep
-xargs
-find 
-gunzip
+# External Dependencies
+## System
+* grep
+* xargs
+* find 
+* gunzip
 
-# conda
-cd-hit-est (from cd-hit)
-minced
-bedtools
-samtools (1.3 or above)
-minimap2
-mlst (torstens)
-ncbi-genome-download 
+## Conda
+* cd-hit-est (from cd-hit)
+* minced
+* bedtools
+* samtools (1.3 or above)
+* minimap2
+* mlst (torstens)
+* ncbi-genome-download 
 
-# pypi
-fastaq (from pyfastaq)
+## Pypi
+* fastaq (from pyfastaq)
 
