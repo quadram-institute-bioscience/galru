@@ -1,5 +1,6 @@
 import os
 import csv
+import sys
 
 
 class Results:
@@ -23,8 +24,9 @@ class Results:
                 crispr_metadata[int(row[0])] = [row[1], row[2], row[3], row[4]]
 
         with open(self.mapping_output_file, newline="") as csvfile:
-            mapping_reader = csv.reader(csvfile, delimiter="\t")
-            for row in mapping_reader:
+            mapping_lines = csvfile.readlines()
+            for row_unsplit in mapping_lines:
+                row = row_unsplit.split("\t")
                 st = crispr_metadata[int(row[2])][3]
                 if st in results:
                     results[st] += 1

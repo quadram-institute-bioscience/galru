@@ -218,6 +218,8 @@ class DatabaseBuilder:
                 continue
 
             crispr_nucleotides_file = self.extract_nucleotides_from_gff(f, crispr_gff)
+            
+            
             self.append_crispr_file(
                 crispr_nucleotides_file,
                 f,
