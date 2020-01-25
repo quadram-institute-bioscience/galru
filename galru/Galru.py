@@ -9,6 +9,10 @@ from tempfile import mkstemp
 from Bio import SeqIO
 from galru.Results import Results
 from galru.Schemas import Schemas
+from galru.Blast import Blast
+from galru.BlastDatabase import BlastDatabase
+from galru.BlastResult import BlastResult
+from galru.BlastFilter import BlastFilter
 
 # map all the reads to the Cas genes. Any reads that map are them mapped against the CRISPRs
 
@@ -24,6 +28,9 @@ class Galru:
         self.debug = options.debug
         self.gene_start_offset = options.gene_start_offset
         self.extended_results = options.extended_results
+        self.qcov_margin = options.qcov_margin
+        self.min_bitscore = options.min_bitscore
+        self.min_identity = options.min_identity
 
         self.database_directory = Schemas().database_directory(
             options.db_dir, options.species
@@ -82,53 +89,21 @@ class Galru:
         os.close(fd)
         return reads_outputfile
 
-    # map the cas gene reads to the reference database of crisprs
+    # blast the crisprs against the reads
     def map_reads_to_crisprs(self, cas_reads):
-        fd, reads_outputfile = mkstemp()
-        self.files_to_cleanup.append(reads_outputfile)
-
-        cmd = " ".join(
-            [
-                "minimap2",
-                "-x",
-                self.technology,
-				"--secondary=no",
-				"-t",
-				str(self.threads),
-                "-a",
-                self.crisprs_file,
-                cas_reads,
-                "|",
-                "samtools",
-                "view",
-				"--threads",
-				str(self.threads),
-				"-q",
-				str(self.min_mapping_quality),
-                "-F",
-                "4",
-                "-",
-                "|",
-                "awk",
-                "'{if($4 <= " + str(self.gene_start_offset) + ") print $0}'",
-                ">",
-                reads_outputfile,
-                self.redirect_output,
-            ]
-        )
-		
-        if self.verbose:
-            print("Map reads to CRISPRs:\t" + cmd)
-
-        subprocess.check_output(cmd, shell=True)
-        os.close(fd)
-        return reads_outputfile
+        # Create a blast database out of the reads
+        blastdatabase = BlastDatabase(cas_reads, self.verbose)
+        blast = Blast(blastdatabase.db_prefix, self.threads, 100 - self.qcov_margin,  self.min_identity, self.verbose)
+        blast_results = blast.run_blast(self.crisprs_file)
+        best_hits = BlastFilter(blast_results, self.qcov_margin, self.min_bitscore).best_hit_for_each_read()
+        
+        return best_hits
 
     def run(self):
         num_reads, num_bases = self.count_reads_and_bases()
         cas_reads = self.reads_with_cas_genes()
-        crispr_mapping = self.map_reads_to_crisprs(cas_reads)
-        r = Results(crispr_mapping, self.metadata_file, self.extended_results).results(
+        crispr_blast = self.map_reads_to_crisprs(cas_reads)
+        r = Results(crispr_blast, self.metadata_file, self.extended_results).results(
             num_reads
         )
         print(r)

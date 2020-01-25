@@ -196,6 +196,7 @@ Coming soon
 * minimap2
 * mlst (torstens)
 * ncbi-genome-download 
+* blast+
 
 ## Pypi
 * fastaq (from pyfastaq)
