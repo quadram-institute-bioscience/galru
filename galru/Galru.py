@@ -88,13 +88,34 @@ class Galru:
         subprocess.check_output(cmd, shell=True)
         os.close(fd)
         return reads_outputfile
+        
+    def map_crisprs_to_reads(self, cas_reads):
+        blastdatabase = BlastDatabase(self.crisprs_file, self.verbose)
+        blast = Blast(blastdatabase.db_prefix, self.threads, 0,  self.min_identity, self.verbose)
+        blast_results = blast.run_blast(cas_reads)
+        crispr_ids = BlastFilter(blast_results, 100, self.min_bitscore).crispr_ids()
+        
+        fdcff, crisprs_filtered_file = mkstemp()
+        self.files_to_cleanup.append(crisprs_filtered_file)
+        
+        with open(self.crisprs_file, "r") as in_handle, open(crisprs_filtered_file, "a+") as out_fh:
+            for record in SeqIO.parse(in_handle, "fasta"):
+                if record.id in crispr_ids:
+                    SeqIO.write(record, out_fh, "fasta")
+        
+        fd, crisprs_outputfile = mkstemp()
+        self.files_to_cleanup.append(crisprs_outputfile)
+
+        os.close(fd)
+        os.close(fdcff)
+        return crisprs_filtered_file
 
     # blast the crisprs against the reads
-    def map_reads_to_crisprs(self, cas_reads):
+    def blast_crisprs_to_reads(self, cas_reads, filtered_crisprs):
         # Create a blast database out of the reads
         blastdatabase = BlastDatabase(cas_reads, self.verbose)
         blast = Blast(blastdatabase.db_prefix, self.threads, 100 - self.qcov_margin,  self.min_identity, self.verbose)
-        blast_results = blast.run_blast(self.crisprs_file)
+        blast_results = blast.run_blast(filtered_crisprs)
         best_hits = BlastFilter(blast_results, self.qcov_margin, self.min_bitscore).best_hit_for_each_read()
         
         return best_hits
@@ -102,7 +123,8 @@ class Galru:
     def run(self):
         num_reads, num_bases = self.count_reads_and_bases()
         cas_reads = self.reads_with_cas_genes()
-        crispr_blast = self.map_reads_to_crisprs(cas_reads)
+        filtered_crisprs = self.map_crisprs_to_reads(cas_reads)
+        crispr_blast = self.blast_crisprs_to_reads(cas_reads, filtered_crisprs)
         r = Results(crispr_blast, self.metadata_file, self.extended_results).results(
             num_reads
         )

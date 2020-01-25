@@ -24,8 +24,16 @@ class BlastFilter:
             if result.qcov >=  qcov_min and result.qcov <= qcov_max and result.qcovhsp >=  qcov_min and result.qcovhsp <= qcov_max and result.bit_score >= self.min_bitscore:
                 filtered.append(result)
         return filtered
-            
-            
+    
+    def crispr_ids(self):
+        crispr_freq = {}
+        for result in self.filter_results():
+            if result.subject in crispr_freq:
+                crispr_freq[result.subject] += 1
+            else:
+                crispr_freq[result.subject] = 1 
+        return crispr_freq.keys()
+   
     def best_hit_for_each_read(self):
         read_best_hit = {}
         
