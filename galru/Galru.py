@@ -52,7 +52,7 @@ class Galru:
         if self.verbose:
             self.redirect_output = ""
         else:
-            self.redirect_output = " 2>&1"
+            self.redirect_output = " 2>/dev/null "
 
     # map the raw reads to the clustered cas genes = gives reads containing cas genes
     def reads_with_cas_genes(self):
@@ -69,6 +69,7 @@ class Galru:
                 "-a",
                 self.cas_fasta,
                 self.input_file,
+                self.redirect_output,
                 "|",
                 "samtools",
                 "fasta",
@@ -116,7 +117,9 @@ class Galru:
         blastdatabase = BlastDatabase(cas_reads, self.verbose)
         blast = Blast(blastdatabase.db_prefix, self.threads, 100 - self.qcov_margin,  self.min_identity, self.verbose)
         blast_results = blast.run_blast(filtered_crisprs)
-        best_hits = BlastFilter(blast_results, self.qcov_margin, self.min_bitscore).best_hit_for_each_read()
+        
+        bf = BlastFilter(blast_results, self.qcov_margin, self.min_bitscore)
+        best_hits = bf.best_hit_for_each_read()
         
         return best_hits
 

@@ -21,7 +21,7 @@ class BlastFilter:
         qcov_min = 100 - self.qcov_margin
         qcov_max = 100 + self.qcov_margin
         for result in self.unfiltered_results:
-            if result.qcov >=  qcov_min and result.qcov <= qcov_max and result.qcovhsp >=  qcov_min and result.qcovhsp <= qcov_max and result.bit_score >= self.min_bitscore:
+            if result.qcov >=  qcov_min and result.qcov <= qcov_max and result.bit_score >= self.min_bitscore:
                 filtered.append(result)
         return filtered
     

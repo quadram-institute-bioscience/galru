@@ -36,7 +36,6 @@ class Blast:
         '-db', self.blast_db, '-word_size', str(self.word_size), 
         '-num_threads', str(self.threads), '-task', self.task, 
         '-perc_identity', str(self.min_identity),
-        '-qcov_hsp_perc', str(self.qcov_hsp_perc),
         '-query', self.decompress_file_to_tmp(query), '>', blast_results])
         
     def run_blast(self, query):
