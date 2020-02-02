@@ -15,16 +15,26 @@ class Results:
         else:
             return self.summerised_results(num_input_reads)
 
-    def summerised_results(self, num_input_reads):
-        results = {}
+    def crispr_metadata_read(self):
         crispr_metadata = {}
         with open(self.metadata_file, newline="") as csvfile:
             metadata_reader = csv.reader(csvfile, delimiter="\t")
             for row in metadata_reader:
-                crispr_metadata[int(row[0])] = [row[1], row[2], row[3], row[4]]
+                crispr_index = int(row[0])
+                if crispr_index in crispr_metadata:
+                    crispr_metadata[crispr_index].append([row[1], row[2], row[3], row[4]])
+                else:
+                    crispr_metadata[crispr_index] = [[row[1], row[2], row[3], row[4]]]
+        return crispr_metadata
+        
+
+    def summerised_results(self, num_input_reads):
+        results = {}
+        crispr_metadata = self.crispr_metadata_read()
 
         for blast_result in self.blast_results:
-            st = crispr_metadata[int(blast_result.query_name)][3]
+            st = ",".join([c[3] for c in crispr_metadata[int(blast_result.query_name)] ])
+
             if st in results:
                 results[st] += 1
             else:
@@ -41,15 +51,11 @@ class Results:
 
     def full_extended_results(self, num_input_reads):
         results = []
-        crispr_metadata = {}
-        with open(self.metadata_file, newline="") as csvfile:
-            metadata_reader = csv.reader(csvfile, delimiter="\t")
-            for row in metadata_reader:
-                crispr_metadata[int(row[0])] = [row[1], row[2], row[3], row[4]]
+        crispr_metadata = self.crispr_metadata_read()
 
         for blast_result in self.blast_results:
             crispr_id = int(blast_result.query_name)
-            st = crispr_metadata[int(blast_result.query_name)][3]
+            st = ",".join([c[3] for c in crispr_metadata[crispr_id] ])
             
             result = "\t".join(
                 [

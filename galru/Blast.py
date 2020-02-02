@@ -36,7 +36,7 @@ class Blast:
         '-db', self.blast_db, '-word_size', str(self.word_size), 
         '-num_threads', str(self.threads), '-task', self.task, 
         '-perc_identity', str(self.min_identity),
-        '-query', self.decompress_file_to_tmp(query), '>', blast_results])
+        '-query', self.decompress_file_to_tmp(query), '-out', blast_results])
         
     def run_blast(self, query):
         fd, blast_results = mkstemp()

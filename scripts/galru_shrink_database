@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+import sys
+sys.path.append('../')
+sys.path.append('./')
+import argparse
+import os
+import pkg_resources
+sys.path.append('../')
+sys.path.append('./')
+from galru.GalruShrinkDatabase import GalruShrinkDatabase
+
+version = ''
+try:
+	version = pkg_resources.get_distribution("galru").version
+except pkg_resources.DistributionNotFound:
+	version = 'x.y.z'
+
+parser = argparse.ArgumentParser(
+	description = 'Shrink database',
+	usage = 'galru_shrink_database [options] species',
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+parser.add_argument('species',  help='Species name, use galru_species to see all available', type=str)
+
+# Input
+parser.add_argument('--percentage_similarity', '-p',  help='Base directory for species databases, defaults to bundled', type=float, default = 0.99 )
+parser.add_argument('--db_dir', '-d',  help='Base directory for species databases, defaults to bundled', type=str )
+
+
+# Output
+parser.add_argument('--output_filename', '-o',  help='Output database name', type=str, default = "metadata_filtered.tsv")
+
+parser.add_argument('--debug', action='store_true', help='Turn on debugging and save intermediate files', default = False)
+parser.add_argument('--verbose', '-v', action='store_true', help='Turn on verbose output', default = False)
+parser.add_argument('--version', action='version', version=str(version))
+
+options = parser.parse_args()
+
+if options.debug:
+    import cProfile, pstats, io
+    pr = cProfile.Profile()
+    pr.enable()
+    
+    g = GalruShrinkDatabase(options)
+    g.run()
+    
+    pr.disable()
+    s = io.StringIO()
+    sortby = 'cumulative'
+    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    ps.print_stats()
+    print(s.getvalue())
+else:
+    g = GalruShrinkDatabase(options) 
+    g.run()
