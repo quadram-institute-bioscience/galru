@@ -33,8 +33,10 @@ class Results:
         crispr_metadata = self.crispr_metadata_read()
 
         for blast_result in self.blast_results:
-            st = ",".join([c[3] for c in crispr_metadata[int(blast_result.query_name)] ])
-
+            crispr_id = int(blast_result.query_name)
+            sorted_sts = sorted(list(set([int(c[3]) for c in crispr_metadata[crispr_id] ])))
+            st = ",".join([str(s) for s in sorted_sts])
+            
             if st in results:
                 results[st] += 1
             else:
@@ -55,7 +57,8 @@ class Results:
 
         for blast_result in self.blast_results:
             crispr_id = int(blast_result.query_name)
-            st = ",".join([c[3] for c in crispr_metadata[crispr_id] ])
+            sorted_sts = sorted(list(set([int(c[3]) for c in crispr_metadata[crispr_id] ])))
+            st = ",".join([str(s) for s in sorted_sts])
             
             result = "\t".join(
                 [

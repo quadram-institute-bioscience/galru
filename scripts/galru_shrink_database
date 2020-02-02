@@ -28,7 +28,9 @@ parser.add_argument('--db_dir', '-d',  help='Base directory for species database
 
 
 # Output
-parser.add_argument('--output_filename', '-o',  help='Output database name', type=str, default = "metadata_filtered.tsv")
+parser.add_argument('--output_filename', '-o',  help='Output database name', type=str, default = "filtered.metadata.tsv")
+parser.add_argument('--output_crispr_filename', '-c',  help='Output CRISPR FASTA file name', type=str, default = "filtered.crispr_regions.fasta")
+
 
 parser.add_argument('--debug', action='store_true', help='Turn on debugging and save intermediate files', default = False)
 parser.add_argument('--verbose', '-v', action='store_true', help='Turn on verbose output', default = False)

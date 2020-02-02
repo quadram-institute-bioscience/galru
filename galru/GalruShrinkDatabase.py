@@ -3,6 +3,7 @@ import os
 import subprocess
 import shutil
 import csv
+from Bio import SeqIO
 from tempfile import mkstemp
 from galru.DatabaseBuilder import DatabaseBuilder
 from galru.GalruCreateCas import GalruCreateCas
@@ -12,11 +13,15 @@ class Cluster:
     def __init__(self):
         self.centroid = None
         self.other_ids = []
+        
+    def __str__(self):
+        return str(self.centroid) + "->\t" + "\t".join([str(i) for i in self.other_ids])
 
 class GalruShrinkDatabase:
     def __init__(self, options):
         self.percentage_similarity = options.percentage_similarity
         self.output_filename = options.output_filename
+        self.output_crispr_filename = options.output_crispr_filename
         self.debug = options.debug
         self.verbose = options.verbose
         self.files_to_cleanup = []
@@ -34,7 +39,8 @@ class GalruShrinkDatabase:
     def run(self):
         crispr_clusters_fasta_file = self.cluster_crisprs()
         all_clusters = self.read_cdhit_clusters(crispr_clusters_fasta_file+'.clstr')
-        self.update_metadata_file( self.metadata_file, self.output_filename, all_clusters)
+        crispr_ids_used = self.update_metadata_file( self.metadata_file, self.output_filename, all_clusters)
+        self.update_crisprs_file(crispr_ids_used)
 
     def cluster_crisprs(self):
         fd, crispr_output = mkstemp()
@@ -68,11 +74,11 @@ class GalruShrinkDatabase:
                 
                 # start of new cluster
                 if m:
-                    # save old cluster
-                    all_clusters.append(current_cluster)
-                    
-                    # create new cluster 
-                    current_cluster = Cluster()
+                    if current_cluster.centroid is not None:
+                        # save old cluster
+                        all_clusters.append(current_cluster)
+                        # create new cluster 
+                        current_cluster = Cluster()
                     
                 else:
                     # within a cluster
@@ -89,12 +95,14 @@ class GalruShrinkDatabase:
         
     def update_metadata_file(self, input_filename, output_filename, clusters):
         cluster_ids_to_representative = {}
+        crispr_ids_used = [ int(c.centroid) for c in clusters if c.centroid is not None]
         for cluster in clusters:
             for c in cluster.other_ids:
                 cluster_ids_to_representative[c] = cluster.centroid
         
         lines = None
         output_lines = []
+        
         with open( input_filename, "r") as md_read_fh, open( output_filename, "w+") as md_write_fh:
             metadata_reader = csv.reader(md_read_fh, delimiter="\t")
             for row in metadata_reader:
@@ -114,6 +122,13 @@ class GalruShrinkDatabase:
                     output_lines.append( "\t".join(row) )
             
             md_write_fh.write("\n".join(sorted(output_lines)))
+        return crispr_ids_used
+            
+    def update_crisprs_file(self, crispr_ids):
+        with open(self.crisprs_file, "r") as in_handle, open(self.output_crispr_filename, "w+") as out_fh:
+            for record in SeqIO.parse(in_handle, "fasta"):
+                if int(record.id) in crispr_ids:
+                    SeqIO.write(record, out_fh, "fasta")
 
     def __del__(self):
         if not self.debug:
