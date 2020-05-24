@@ -128,7 +128,7 @@ class Galru:
         cas_reads = self.reads_with_cas_genes()
         filtered_crisprs = self.map_crisprs_to_reads(cas_reads)
         crispr_blast = self.blast_crisprs_to_reads(cas_reads, filtered_crisprs)
-        r = Results(crispr_blast, self.metadata_file, self.extended_results).results(
+        r = Results(crispr_blast, self.metadata_file, self.extended_results, self.input_file).results(
             num_reads
         )
         print(r)
