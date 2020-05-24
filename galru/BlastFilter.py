@@ -33,6 +33,20 @@ class BlastFilter:
             else:
                 crispr_freq[result.subject] = 1 
         return crispr_freq.keys()
+        
+    def spoligotype(self):     
+        typing = []           
+        found_spacers = {int(result.query_name):1 for result in self.filter_results()}
+            
+        for i in range(1,43):
+            if i in found_spacers:
+                typing.append(1)
+                
+            else:
+                typing.append(0)
+            
+        return typing 
+    
    
     def best_hit_for_each_read(self):
         read_best_hit = {}

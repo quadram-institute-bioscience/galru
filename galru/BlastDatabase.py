@@ -11,6 +11,7 @@ class BlastDatabase:
     def __init__(self, input_file, verbose):
         self.input_file = input_file
         self.verbose = verbose
+        self.db_prefix = None
         self.db_prefix = self.make_blastdb(self.input_file)
         
      # make a blast database
@@ -24,6 +25,6 @@ class BlastDatabase:
         return output_prefix
     
     def __del__(self):
-        if os.path.exists(self.db_prefix):
+        if self.db_prefix is not None and os.path.exists(self.db_prefix):
             shutil.rmtree(self.db_prefix)
             

@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+import sys
+sys.path.append('../')
+sys.path.append('./')
+import argparse
+import os
+import pkg_resources
+sys.path.append('../')
+sys.path.append('./')
+from galru.GalruSpol import GalruSpol
+
+version = ''
+try:
+	version = pkg_resources.get_distribution("galru").version
+except pkg_resources.DistributionNotFound:
+	version = 'x.y.z'
+
+parser = argparse.ArgumentParser(
+	description = 'Spoligotyping from uncorrected long reads',
+	usage = 'galru_spol [options] uncorrected_long_reads.fastq',
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+parser.add_argument('input_file', help='Input FASTQ file of uncorrected long reads (optionally gzipped)', type=str)
+
+# Input
+parser.add_argument('--db_dir', '-d',  help='Base directory for species databases, defaults to bundled', type=str )
+parser.add_argument('--cas_fasta', '-c',  help='Cas gene FASTA file (optionally gzipped), defaults to bundled', type=str )
+parser.add_argument('--technology', '-y',  help='Sequencing technology', type=str, default='map-ont', choices=['map-ont','map-pb', 'ava-pb', 'ava-ont'])
+parser.add_argument('--threads', '-t',  help='No. of threads to use', type=int, default=1)
+
+# Output
+parser.add_argument('--output_file', '-o',  help='Output filename, defaults to STDOUT', type=str)
+parser.add_argument('--extended_results', '-x', action='store_true', help='Output extended results', default = False)
+
+# Advanced
+parser.add_argument('--gene_start_offset', '-g',  help='Only count CRISPR reads which cover this base', type=int, default = 30 )
+parser.add_argument('--min_mapping_quality', '-m',  help='Minimum mapping quality score', type=int, default = 10 )
+parser.add_argument('--qcov_margin', '-q',  help='Maximum perc coverage difference between CRISPR and read', type=int, default = 100 )
+parser.add_argument('--min_bitscore', '-b',  help='Minimum blast bitscore', type=int, default = 50 )
+parser.add_argument('--min_identity', '-i',  help='Minimum blast identity', type=int, default = 99 )
+parser.add_argument('--species', '-s',  help='Species name, use galru_species to see all available', type=str, default ="Mycobacterium_tuberculosis")
+
+
+parser.add_argument('--debug', action='store_true', help='Turn on debugging and save intermediate files', default = False)
+parser.add_argument('--verbose', '-v', action='store_true', help='Turn on verbose output', default = False)
+parser.add_argument('--version', action='version', version=str(version))
+
+options = parser.parse_args()
+
+if options.debug:
+    import cProfile, pstats, io
+    pr = cProfile.Profile()
+    pr.enable()
+    
+    g = GalruSpol(options)
+    g.run()
+    
+    pr.disable()
+    s = io.StringIO()
+    sortby = 'cumulative'
+    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    ps.print_stats()
+    print(s.getvalue())
+else:
+    g = GalruSpol(options) 
+    g.run()
