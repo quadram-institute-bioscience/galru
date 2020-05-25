@@ -2,10 +2,10 @@ import unittest
 import os
 import shutil
 import filecmp
-from galru.Galru import Galru
+from galru.GalruSpol import GalruSpol
 
 test_modules_dir = os.path.dirname(os.path.realpath(__file__))
-data_dir = os.path.join(test_modules_dir, "data", "galru")
+data_dir = os.path.join(test_modules_dir, "data", "galru_spol")
 
 
 class TestOptions:
@@ -14,7 +14,6 @@ class TestOptions:
         species,
         input_file,
         db_dir,
-        cas_fasta,
         threads,
         technology,
         output_file,
@@ -27,7 +26,6 @@ class TestOptions:
         self.species = species
         self.input_file = input_file
         self.db_dir = db_dir
-        self.cas_fasta = cas_fasta
         self.threads = threads
         self.technology = technology
         self.output_file = output_file
@@ -36,19 +34,18 @@ class TestOptions:
         self.debug = debug
         self.gene_start_offset = gene_start_offset
         self.extended_results = extended_results
-        self.qcov_margin = 20
-        self.min_bitscore = 400
-        self.min_identity = 84
-
+        self.cas_fasta =  None
+        self.qcov_margin = 100
+        self.min_bitscore = 30
+        self.min_identity = 95
 
 class TestGalru(unittest.TestCase):
     def test_normal_analysis(self):
-        g = Galru(
+        g = GalruSpol(
             TestOptions(
-                "Salmonella",
-                os.path.join(data_dir, "uncorrected_reads.fasta.gz"),
-                data_dir,
-                os.path.join(data_dir, "cas.fa.gz"),
+                "Mycobacterium_tuberculosis",
+                os.path.join(data_dir, "GCF_002886685.1_ASM288668v1.small"),
+                None,
                 1,
                 "map-ont",
                 "output_file",
@@ -59,10 +56,13 @@ class TestGalru(unittest.TestCase):
                 False
             )
         )
-        g.run()
+        spoligotype = g.run()
+        self.assertEqual(len(spoligotype), 43)
+        self.assertEqual(spoligotype, '1111111101111111111000111111111100001111111')
+        
 
         self.assertTrue(os.path.exists("output_file"))
-        #self.assertTrue(
-        #    filecmp.cmp(os.path.join(data_dir, "expected_output_file"), "output_file")
-        #)
+        self.assertTrue(
+            filecmp.cmp(os.path.join(data_dir, "expected_output_file"), "output_file")
+        )
         os.remove("output_file")
