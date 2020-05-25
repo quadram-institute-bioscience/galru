@@ -91,7 +91,7 @@ class GalruSpol:
         
     def map_crisprs_to_reads(self, cas_reads):
         blastdatabase = BlastDatabase(self.crisprs_file, self.verbose)
-        blast = Blast(blastdatabase.db_prefix, self.threads, 0,  self.min_identity, self.verbose, word_size = 9, exec = 'blastn', evalue = 0.000001,  task = 'blastn-short')
+        blast = Blast(blastdatabase.db_prefix, self.threads, 0,  self.min_identity, self.verbose, word_size = 9, exec = 'blastn', evalue = 0.0001,  task = 'blastn-short')
         blast_results = blast.run_blast(cas_reads)
         crispr_ids = BlastFilter(blast_results, 100, self.min_bitscore).crispr_ids()
         
@@ -114,7 +114,7 @@ class GalruSpol:
     def blast_crisprs_to_reads(self, cas_reads, filtered_crisprs):
         # Create a blast database out of the reads
         blastdatabase = BlastDatabase(cas_reads, self.verbose)
-        blast = Blast(blastdatabase.db_prefix, self.threads, 100 - self.qcov_margin,  self.min_identity, self.verbose,  word_size = 9, exec = 'blastn', evalue = 0.000001,  task = 'blastn-short')
+        blast = Blast(blastdatabase.db_prefix, self.threads, 100 - self.qcov_margin,  self.min_identity, self.verbose,  word_size = 9, exec = 'blastn', evalue = 0.0001,  task = 'blastn-short')
         blast_results = blast.run_blast(filtered_crisprs)
         
         bf = BlastFilter(blast_results, self.qcov_margin, self.min_bitscore)
@@ -133,7 +133,7 @@ class GalruSpol:
             with open(self.output_file, "w") as out_fh:
                 out_fh.write(spoligotype)
 
-        return self
+        return spoligotype
 
     def count_reads_and_bases(self):
         num_reads = 0

@@ -38,10 +38,9 @@ class BlastFilter:
         typing = []           
         found_spacers = {int(result.query_name):1 for result in self.filter_results()}
             
-        for i in range(1,43):
+        for i in range(1,44):
             if i in found_spacers:
                 typing.append(1)
-                
             else:
                 typing.append(0)
             
