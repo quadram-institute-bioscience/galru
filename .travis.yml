@@ -16,7 +16,7 @@ install:
   - conda config --add channels bioconda
   - conda config --add channels conda-forge
   - conda update -q conda
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION git pip minimap2 cd-hit bedtools minced samtools ncbi-genome-download blast
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION git pip minimap2 cd-hit bedtools minced samtools ncbi-genome-download blast mlst
   - source activate test-environment
   - python3 setup.py install
 before_script:
