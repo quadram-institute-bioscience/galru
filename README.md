@@ -43,9 +43,29 @@ To use it you would use a command such as this (substituting in your filename/di
 docker run --rm -it -v /path/to/example_data:/example_data quadraminstitute/galru galru /example_data/example_reads.fastq
 ```
 
-# Usage
+## Pypi/pip
+This is the most difficult installation method and assumes you know how to install dependancies yourself.  Install the dependancies, as listed below.  Then install galru
+```
+pip install galru
+```
 
-## Quick start
+To install the development version:
+```
+pip install git+https://github.com/quadram-institute-bioscience/galru.git
+```
+
+
+# Usage
+To run the software provide a FASTQ or FASTA file of reads. This can also be an assembly. Short reads will not work.
+```
+galru example_reads.fastq
+```
+This will output a spoligotype in the format
+```
+1001111111111111111111111111000010110001111
+```
+where 1 indicates the spacer is present and 0 indicates it is absent.
+	
 
 ## galru
 
@@ -96,7 +116,7 @@ Galru is free software, licensed under [GPLv3](https://raw.githubusercontent.com
 Please report any issues or to provide feedback please go to the [issues page](https://github.com/quadram-institute-bioscience/galru/issues). If you make improvements to the software, add databases or extend profiles, please send us the changes though a [pull request](https://github.com/quadram-institute-bioscience/galru/pulls) so that the whole community may benefit from your work.
 
 # Citation
-Coming soon
+"Rapid Mycobacterium tuberculosis spoligotyping from uncorrected long reads using Galru", Andrew J. Page, Nabil-Fareed Alikhan, Michael Strinden, Thanh Le Viet, Timofey Skvortsov, 2020.
 
 # Etymology
 [galrú](https://www.teanglann.ie/en/fgb/galr%C3%BA) (Gal-roo) is the word for infection in Irish (Gaeilge). 
@@ -116,6 +136,7 @@ Coming soon
 * minimap2
 * ncbi-genome-download 
 * blast+
+* mlst
 
 ## Pypi
 * fastaq (from pyfastaq)
