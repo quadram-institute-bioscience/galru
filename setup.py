@@ -16,6 +16,7 @@ setup(
     version=version,
     description="galru: CRISPR types",
     long_description=read("README.md"),
+	long_description_content_type="text/markdown",
     packages=find_packages(),
     author="Andrew J. Page",
     author_email="andrew.page@quadram.ac.uk",
