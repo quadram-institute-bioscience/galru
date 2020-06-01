@@ -116,7 +116,9 @@ Galru is free software, licensed under [GPLv3](https://raw.githubusercontent.com
 Please report any issues or to provide feedback please go to the [issues page](https://github.com/quadram-institute-bioscience/galru/issues). If you make improvements to the software, add databases or extend profiles, please send us the changes though a [pull request](https://github.com/quadram-institute-bioscience/galru/pulls) so that the whole community may benefit from your work.
 
 # Citation
-"Rapid Mycobacterium tuberculosis spoligotyping from uncorrected long reads using Galru", Andrew J. Page, Nabil-Fareed Alikhan, Michael Strinden, Thanh Le Viet, Timofey Skvortsov, 2020.
+"Rapid Mycobacterium tuberculosis spoligotyping from uncorrected long reads using Galru",
+Andrew J Page, Nabil-Fareed Alikhan, Michael Strinden, Thanh Le Viet, Timofey Skvortsov,
+bioRxiv 2020.05.31.126490; doi: https://doi.org/10.1101/2020.05.31.126490
 
 # Etymology
 [galrú](https://www.teanglann.ie/en/fgb/galr%C3%BA) (Gal-roo) is the word for infection in Irish (Gaeilge). 
